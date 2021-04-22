@@ -3,7 +3,7 @@ analysis
 analysis/*
 !analysis/README.md
 !config
-!config/*
+!config/**
 !resources
 !resources/*
 !workflow
@@ -17,3 +17,4 @@ analysis/*
 !README.md
 !knowledge-base.md
 !first-test.py
+

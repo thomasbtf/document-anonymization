@@ -57,7 +57,7 @@ if __name__ == "__main__":
 
     personal_data = parse_meta_data(json_path)
 
-    # TODO enrich the personal data
+    # TODO enrich the personal data. Other examples below
     # if personal_data.get("birthDate"):
     #     personal_data = format_birthday(personal_data)
 
@@ -68,3 +68,15 @@ if __name__ == "__main__":
     #     personal_data = format_country(personal_data)
 
     save_personal_data(personal_data, out_path)
+
+
+# def enrich_personal_data(personal_data: dict) -> dict:
+#     personal_data["names_combined"] = ",".join(
+#         [personal_data["last_name"], personal_data["middel_name"]]
+#     )
+#     personal_data["slash_birthday"] = datetime.datetime.strptime(
+#         personal_data["birthday"], "%d.%m.%Y"
+#     ).strftime("%d/%m/%Y")
+#     personal_data = {key: value.lower() for key, value in personal_data.items()}
+#     personal_data = {key: value.strip() for key, value in personal_data.items()}
+#     return personal_data

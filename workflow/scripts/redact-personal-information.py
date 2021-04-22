@@ -1,26 +1,10 @@
-import datetime
+import typing
 
 import cv2
 import Levenshtein
 import pandas as pd
 import pytesseract
 from pytesseract import Output
-import typing
-
-personal_data = {
-    "last_name": "Mustermann",
-    "middel_name": "Erika",
-    "first_name": "Maxim",
-    "birthday": "01.01.1920",
-    "street": "Münchener Heidestraße 17",
-    "city": "50667 Köln",
-    "years": "99 Jahre",
-    "case_number": "999999999",
-}
-
-image_file = "in_img"
-
-out_path = "img.jpg"
 
 
 def parse_page(
@@ -30,29 +14,36 @@ def parse_page(
     min_conf: float = 0.6,
     max_dist: int = 2,
 ):
+    """Analyzes the passed image and removes personal information.
+
+    Args:
+        image_path (str): path to the image
+        out_path (str): path where the redacted image should be written to
+        personal_data (dict): personal data that should be made unrecognizable
+        min_conf (float, optional): minimal OCR confidence score. Defaults to 0.6.
+        max_dist (int, optional): maximum Levenshtein distance of the found text on the image to the personal data. Defaults to 2.
+    """
+
     img = cv2.imread(image_path)
 
     df = detect_text(img, min_conf)
-    personal_data = enrich_personal_data(personal_data)
     df = select_personal_data(df, personal_data, max_dist)
     img = redact(df, img)
 
     cv2.imwrite(out_path, img)
 
 
-def enrich_personal_data(personal_data: dict) -> dict:
-    personal_data["names_combined"] = ",".join(
-        [personal_data["last_name"], personal_data["middel_name"]]
-    )
-    personal_data["slash_birthday"] = datetime.datetime.strptime(
-        personal_data["birthday"], "%d.%m.%Y"
-    ).strftime("%d/%m/%Y")
-    personal_data = {key: value.lower() for key, value in personal_data.items()}
-    personal_data = {key: value.strip() for key, value in personal_data.items()}
-    return personal_data
-
-
 def detect_text(img: typing.Any, min_conf: float) -> pd.DataFrame:
+    """Recognizes text on the image.
+
+    Args:
+        img (typing.Any): image with text to be recognized.
+        min_conf (float): minimum OCR Confidence Scores.
+
+    Returns:
+        pd.DataFrame: all found text on image with text field data, filtered by min_conf.
+    """
+
     # ocr
     detected_text_df = pytesseract.image_to_data(img, output_type=Output.DATAFRAME)
 
@@ -70,6 +61,16 @@ def detect_text(img: typing.Any, min_conf: float) -> pd.DataFrame:
 def select_personal_data(
     detected_text_df: pd.DataFrame, personal_data: dict, min_distance: int
 ) -> pd.DataFrame:
+    """Identifies personal data from the detected text.
+
+    Args:
+        detected_text_df (pd.DataFrame): detected text on the image.
+        personal_data (dict): personal data to be masked out
+        min_distance (int): maximum Levenshtein distance of the found text on the image to the personal data.
+
+    Returns:
+        pd.DataFrame: person data with location on image, filtered by min_distance.
+    """
 
     final_df = pd.DataFrame()
 
@@ -126,6 +127,16 @@ def select_personal_data(
 
 
 def redact(personal_data_df: pd.DataFrame, img: typing.Any) -> typing.Any:
+    """Redacts personal data.
+
+    Args:
+        personal_data_df (pd.DataFrame): personal data with location on image.
+        img (typing.Any): image with personal data on it.
+
+    Returns:
+        typing.Any: redacted image.
+    """
+    
     for i in personal_data_df.index:
         (x, y, w, h) = (
             personal_data_df.loc[i].left,
@@ -138,4 +149,20 @@ def redact(personal_data_df: pd.DataFrame, img: typing.Any) -> typing.Any:
 
 
 if __name__ == "__main__":
+
+    # personal_data = {
+    #     "last_name": "Mustermann",
+    #     "middel_name": "Erika",
+    #     "first_name": "Maxim",
+    #     "birthday": "01.01.1920",
+    #     "street": "Münchener Heidestraße 17",
+    #     "city": "50667 Köln",
+    #     "years": "99 Jahre",
+    #     "case_number": "999999999",
+    # }
+
+    image_file = "SNAKEMAKE IN"
+    personal_data = "SNAKEMAKE IN"
+    out_path = "SNAKEMAKE OUT"
+
     parse_page(image_file, out_path, personal_data)

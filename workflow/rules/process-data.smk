@@ -1,6 +1,6 @@
 rule redact_page:
     input:
-        orginal_img = ""
+        orginal_img="",
         personal_data="results/personal-data/{id}.json",
     output:
         "results/processed-docs/{id}/{path_to_img}",

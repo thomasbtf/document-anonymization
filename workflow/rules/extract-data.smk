@@ -2,7 +2,7 @@ rule extract_docs:
     input:
         get_compressed_docs,
     output:
-        directory("results/uncompressed-docs/{id}"),
+        directory("results/uncompressed-docs/{id}/"),
     log:
         "logs/extract_docs/{id}.log",
     shell:

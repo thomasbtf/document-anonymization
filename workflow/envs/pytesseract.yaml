@@ -1,0 +1,11 @@
+channels:
+  - conda-forge
+  - bioconda
+  - anaconda
+dependencies:
+  python =3.9.2
+  pytesseract =0.3.7
+  tesseract =4.1.1
+  opencv =4.5.1
+  python-levenshtein =0.12.2
+  pandas =1.2.4

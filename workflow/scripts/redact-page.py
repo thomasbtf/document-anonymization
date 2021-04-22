@@ -161,8 +161,6 @@ if __name__ == "__main__":
     #     "case_number": "999999999",
     # }
 
-    image_file = "SNAKEMAKE IN"
-    personal_data = "SNAKEMAKE IN"
-    out_path = "SNAKEMAKE OUT"
+    sys.stderr = open(snakemake.log[0], "w")
 
-    parse_page(image_file, out_path, personal_data)
+    parse_page(image_path = snakemake.input.original_img, out_path = snakemake.output[0], personal_data = snakemake.input.personal_data)

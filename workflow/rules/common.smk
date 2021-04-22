@@ -17,3 +17,6 @@ validate(samples, schema="../schemas/documents.schema.yaml")
 
 def get_compressed_docs(wildcards):
     return pep.sample_table.loc[wildcards.id][["compressed_docs"]]
+
+def get_fhir_metadata(wildcards):
+    return pep.sample_table.loc[wildcards.id][["fhir_metadata"]]

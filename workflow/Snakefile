@@ -1,6 +1,9 @@
 # The main entry point of your workflow.
 # After configuring, running snakemake -n in a clone of this repository should successfully execute a dry-run of the workflow.
 
+configfile: "config/config.yaml"
+
+pepfile: config["pepfile"]
 
 report: "report/workflow.rst"
 
@@ -8,11 +11,12 @@ report: "report/workflow.rst"
 singularity: "docker://continuumio/miniconda3"
 
 
-rule all:
-    input:
+# rule all:
+#     input:
         # The first rule should define the default target files
         # Subsequent target rules can be specified below. They should start with all_*.
 
 
 include: "rules/common.smk"
 include: "rules/other.smk"
+include: "rules/extract-data.smk"

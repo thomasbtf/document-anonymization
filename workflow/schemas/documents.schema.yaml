@@ -4,14 +4,18 @@ description: an entry in the sample sheet
 
 # columns that the config/samples.tsv file can have and which type they should be
 properties:
-  sample:
+  sample_name:
+    type: integer
+    description: anonymized identifier
+  fhir_metadata:
     type: string
-    description: sample name/identifier
-  condition:
+    description: path to patient metadata in FHIR format
+  compressed_docs:
     type: string
-    description: sample condition that will be compared during differential analysis (e.g. a treatment, a tissue time, a disease)
+    description: path to compressed docs in lz4 format
 
 # columns that the config/samples.tsv file must have to pass schema validation
 required:
-  - sample
-  - condition
+  - sample_name
+  - fhir_metadata
+  - compressed_docs

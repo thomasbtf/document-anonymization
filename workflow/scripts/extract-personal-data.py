@@ -21,7 +21,7 @@ def parse_meta_data(json_path: str) -> defaultdict:
     personal_data = defaultdict()
     personal_data["name_family"] = data.get("name")[0].get("family")
     personal_data["birthDate"] = data.get("birthDate")
-    personal_data["gender"] = data.get("gender")
+    # personal_data["gender"] = data.get("gender")
     personal_data["address"] = data.get("address")[0].get("line")[0]
     personal_data["city"] = " ".join(
         [data.get("address")[0].get("postalCode"), data.get("address")[0].get("city")]
@@ -68,7 +68,6 @@ if __name__ == "__main__":
     #     personal_data = format_country(personal_data)
 
     save_personal_data(personal_data, out_path)
-
 
 # def enrich_personal_data(personal_data: dict) -> dict:
 #     personal_data["names_combined"] = ",".join(

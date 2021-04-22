@@ -10,6 +10,10 @@ singularity: "docker://continuumio/miniconda3"
 configfile: "config/config.yaml"
 validate(config, schema="../schemas/config.schema.yaml")
 
-samples = pd.read_csv(config["samples"], sep="\t").set_index("sample", drop=False)
-samples.index.names = ["sample_id"]
-validate(samples, schema="../schemas/samples.schema.yaml")
+samples = pd.read_csv("config/pep/documents.csv").set_index("sample_name", drop=False)
+samples.index.names = ["sample_name"]
+validate(samples, schema="../schemas/documents.schema.yaml")
+
+
+def get_compressed_docs(wildcards):
+    return pep.sample_table.loc[wildcards.id][["compressed_docs"]]

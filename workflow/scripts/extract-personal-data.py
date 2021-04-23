@@ -65,9 +65,8 @@ if __name__ == "__main__":
     # if personal_data.get("country"):
     #     personal_data = format_country(personal_data)
 
-    personal_data = {key: value.lower() for key, value in personal_data.items()}
-    personal_data = {key: value.strip() for key, value in personal_data.items()}
-
+    personal_data = {key: value.lower().strip() for key, value in personal_data.items()}
+   
     save_personal_data(personal_data, snakemake.output[0])
 
 # def enrich_personal_data(personal_data: dict) -> dict:

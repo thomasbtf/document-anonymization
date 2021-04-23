@@ -52,6 +52,7 @@ def match_template(image, template):
 if __name__ == "__main__":
 
     sys.stderr = open(snakemake.log[0], "w")
+
     image = cv2.imread(snakemake.input[0])
 
     # TODO Check which preprocessing techniques deliver the best results
@@ -64,5 +65,4 @@ if __name__ == "__main__":
     # TODO add deskewing
     # image = deskew(image)
 
-    cv2.imwrite(snakemake.output.deskewed_image, image)
-    cv2.imwrite(snakemake.output.processed_image, processed_image)
+    cv2.imwrite(snakemake.output[0], processed_image)

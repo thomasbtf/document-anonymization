@@ -1,26 +1,46 @@
 rule preprocess_page:
     input:
-        "results/uncompressed-docs/{id}/{path_to_img}",
+        "results/{id}/uncompressed-docs/{img}",
     output:
-        deskewed_image="results/preprocessed-docs/{id}/{path_to_img}",
-        processed_image="results/preprocessed-docs/{id}/{path_to_img}/placeholder",
+        "results/{id}/preprocessed-docs/{img}",
     log:
-        "logs/preprocess-page/{id}/{path_to_img}.log",
+        "logs/{id}/preprocess-page/{img}.log",
     conda:
         "../envs/opencv.yaml"
     script:
         "../scripts/preprocess-page.py"
 
 
-rule redact_page:
+rule identify_personal_data:
     input:
-        orginal_img="results/uncompressed-docs/{id}/{path_to_img}",
-        personal_data="results/personal-data/{id}.json",
+        preprocessed_page="results/{id}/preprocessed-docs/{img}",
+        personal_data="results/{id}/personal-data.json",
     output:
-        "results/processed-docs/{id}/{path_to_img}",
+        "results/{id}/data-to-redact/{img}.csv",
     log:
-        "logs/redact_page/{id}/{path_to_img}.log",
+        "logs/{id}/identify-personal-data/{img}/{img}.log",
     conda:
         "../envs/pytesseract.yaml"
     script:
+        "../scripts/identify-personal-data.py"
+
+
+rule redact_page:
+    input:
+        orginal_page="results/{id}/uncompressed-docs/{img}",
+        data_to_redact="results/{id}/data-to-redact/{img}.csv",
+    output:
+        "results/{id}/processed-docs/{img}",
+    log:
+        "logs/{id}/redact-page/{img}.log",
+    conda:
+        "../envs/opencv.yaml"
+    script:
         "../scripts/redact-page.py"
+
+
+rule redact_all:
+    input:
+        get_processed_pages,
+    output:
+        touch("results/done/{id}"),

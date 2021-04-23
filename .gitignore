@@ -8,6 +8,8 @@ analysis/*
 !resources/*
 !workflow
 !workflow/**
+!.github
+!.github/**
 !.gitignore
 !.gitattributes
 !.editorconfig

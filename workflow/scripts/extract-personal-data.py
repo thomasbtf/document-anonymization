@@ -51,11 +51,9 @@ def save_personal_data(personal_data: dict, out_path: str):
 
 
 if __name__ == "__main__":
-    # TODO replace placeholders
-    json_path = "SNAKEMKAE INPUT"
-    out_path = "SNAKEMAKE OUTPUT"
+    sys.stderr = open(snakemake.log[0], "w")
 
-    personal_data = parse_meta_data(json_path)
+    personal_data = parse_meta_data(snakemake.input[0])
 
     # TODO enrich the personal data. Other examples below
     # if personal_data.get("birthDate"):
@@ -67,7 +65,9 @@ if __name__ == "__main__":
     # if personal_data.get("country"):
     #     personal_data = format_country(personal_data)
 
-    save_personal_data(personal_data, out_path)
+
+    personal_data = {key: value.lower().strip() for key, value in personal_data.items()}
+    save_personal_data(personal_data, snakemake.output[0])
 
 # def enrich_personal_data(personal_data: dict) -> dict:
 #     personal_data["names_combined"] = ",".join(

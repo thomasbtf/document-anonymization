@@ -20,4 +20,5 @@ def recursive_folder_scan(decomp_data_dir: str, results_csv_paths: str):
 
 
 if __name__ == "__main__":
+    sys.stderr = open(snakemake.log[0], "w")
     recursive_folder_scan(snakemake.input[0], snakemake.output[0])

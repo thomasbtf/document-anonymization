@@ -3,7 +3,7 @@ rule preprocess_page:
         "results/uncompressed-docs/{id}/{path_to_img}",
     output:
         deskewed_image="results/preprocessed-docs/{id}/{path_to_img}",
-        processed_image="results/preprocessed-docs/{id}/{path_to_img}",
+        processed_image="results/preprocessed-docs/{id}/{path_to_img}/placeholder",
     log:
         "logs/preprocess-page/{id}/{path_to_img}.log",
     conda:

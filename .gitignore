@@ -18,3 +18,4 @@ analysis/*
 !knowledge-base.md
 !first-test.py
 
+config/pep/documents.csv

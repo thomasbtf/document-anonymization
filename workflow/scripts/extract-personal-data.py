@@ -26,7 +26,7 @@ def parse_meta_data(json_path: str) -> defaultdict:
     personal_data["city"] = " ".join(
         [data.get("address")[0].get("postalCode"), data.get("address")[0].get("city")]
     )
-    personal_data["country"] = data.get("address")[0].get("country")
+    # personal_data["country"] = data.get("address")[0].get("country")
     personal_data["phone"] = data.get("telecom")[0].get("value")
 
     for i, first_name in enumerate(data.get("name")[0].get("given")):
@@ -64,7 +64,6 @@ if __name__ == "__main__":
 
     # if personal_data.get("country"):
     #     personal_data = format_country(personal_data)
-
 
     personal_data = {key: value.lower().strip() for key, value in personal_data.items()}
     save_personal_data(personal_data, snakemake.output[0])

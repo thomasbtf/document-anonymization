@@ -1,4 +1,5 @@
 import typing
+import json
 
 import cv2
 import Levenshtein
@@ -10,7 +11,7 @@ from pytesseract import Output
 def parse_page(
     image_path: str,
     out_path: str,
-    personal_data: dict,
+    personal_data_path: dict,
     min_conf: float = 0.6,
     max_dist: int = 2,
 ):
@@ -19,12 +20,15 @@ def parse_page(
     Args:
         image_path (str): path to the image
         out_path (str): path where the redacted image should be written to
-        personal_data (dict): personal data that should be made unrecognizable
+        personal_data (dict): path to personal data that should be made unrecognizable
         min_conf (float, optional): minimal OCR confidence score. Defaults to 0.6.
         max_dist (int, optional): maximum Levenshtein distance of the found text on the image to the personal data. Defaults to 2.
     """
 
     img = cv2.imread(image_path)
+
+    with open(personal_data_path) as json_file:
+        personal_data = json.load(json_file)
 
     df = detect_text(img, min_conf)
     df = select_personal_data(df, personal_data, max_dist)
@@ -114,7 +118,6 @@ def select_personal_data(
             )
 
         tmp_df.rename(columns={"text_0": "text", "width_0": "width"}, inplace=True)
-
         # select entries, where distance is below or equal a threshhold
         query_list = []
         for col in tmp_dict.keys():
@@ -150,19 +153,6 @@ def redact(personal_data_df: pd.DataFrame, img: typing.Any) -> typing.Any:
 
 if __name__ == "__main__":
 
-    # personal_data = {
-    #     "last_name": "Mustermann",
-    #     "middel_name": "Erika",
-    #     "first_name": "Maxim",
-    #     "birthday": "01.01.1920",
-    #     "street": "Münchener Heidestraße 17",
-    #     "city": "50667 Köln",
-    #     "years": "99 Jahre",
-    #     "case_number": "999999999",
-    # }
+    sys.stderr = open(snakemake.log[0], "w")
 
-    image_file = "SNAKEMAKE IN"
-    personal_data = "SNAKEMAKE IN"
-    out_path = "SNAKEMAKE OUT"
-
-    parse_page(image_file, out_path, personal_data)
+    parse_page(image_path = snakemake.input.orginal_img, out_path = snakemake.output[0], personal_data_path = snakemake.input.personal_data)

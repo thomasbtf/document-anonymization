@@ -1,7 +1,7 @@
 *
-analysis
-analysis/*
-!analysis/README.md
+!.github
+!.github/**
+!.test
 !config
 !config/**
 !resources
@@ -13,10 +13,7 @@ analysis/*
 !.gitignore
 !.gitattributes
 !.editorconfig
-!.travis.yml
-!.test
 !LICENSE
 !README.md
 !knowledge-base.md
 !first-test.py
-

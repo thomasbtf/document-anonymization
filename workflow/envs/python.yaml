@@ -3,4 +3,5 @@ channels:
   - bioconda
   - anaconda
 dependencies:
-  python =3.9.2
+  - python =3.9.2
+

@@ -75,7 +75,7 @@ def select_personal_data(
         pd.DataFrame: person data with location on image, filtered by min_distance.
     """
 
-    final_df = pd.DataFrame()
+    final_df = pd.DataFrame(columns=["left", "top", "width", "height", "conf", "text"])
 
     max_spaces = max([value.count(" ") for value in personal_data.values()])
     for no_spaces in range(max_spaces + 1):
@@ -117,15 +117,19 @@ def select_personal_data(
             )
 
         tmp_df.rename(columns={"text_0": "text", "width_0": "width"}, inplace=True)
+
         # select entries, where distance is below or equal a threshhold
         query_list = []
         for col in tmp_dict.keys():
             query_list.append(f"{col}<={min_distance}")
-        tmp_df = tmp_df.query(" | ".join(query_list))
 
-        final_df = final_df.append(tmp_df, ignore_index=True)
+        # if query list is not empty, thus personal data was found,
+        # then append filtered df
+        if query_list:
+            tmp_df = tmp_df.query(" | ".join(query_list))
+            final_df = final_df.append(tmp_df, ignore_index=True)
 
-    return final_df[["left", "top", "width", "height", "conf", "text"]]
+    return final_df
 
 
 if __name__ == "__main__":

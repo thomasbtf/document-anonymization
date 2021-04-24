@@ -18,7 +18,7 @@ rule identify_personal_data:
     output:
         "results/{id}/data-to-redact/{img}.csv",
     log:
-        "logs/{id}/identify-personal-data/{img}/{img}.log",
+        "logs/{id}/identify-personal-data/{img}.log",
     conda:
         "../envs/pytesseract.yaml"
     script:

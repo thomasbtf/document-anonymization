@@ -36,7 +36,7 @@ def get_all_ids():
 
 
 def get_processed_pages(wildcards):
-    with checkpoints.scan_decomp_dir.get(id=wildcards.id).output[0].open() as f:
+    with checkpoints.fix_file_ext.get(id=wildcards.id).output[0].open() as f:
         paths = pd.read_csv(f, sep="\n", header=None, squeeze=True)
 
     paths = [

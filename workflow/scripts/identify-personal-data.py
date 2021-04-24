@@ -56,6 +56,8 @@ def detect_text(img: typing.Any, min_conf: float) -> pd.DataFrame:
         columns=["level", "page_num", "block_num", "par_num", "line_num", "word_num"],
         inplace=True,
     )
+
+    detected_text_df.text = detected_text_df.text.astype(str)
     detected_text_df.text = detected_text_df.text.str.lower()
 
     return detected_text_df

@@ -39,10 +39,10 @@ def redact(personal_data_df: pd.DataFrame, img: typing.Any) -> typing.Any:
 
     for i in personal_data_df.index:
         (x, y, w, h) = (
-            personal_data_df.loc[i].left,
-            personal_data_df.loc[i].top,
-            personal_data_df.loc[i].width,
-            personal_data_df.loc[i].height,
+            int(personal_data_df.loc[i].left),
+            int(personal_data_df.loc[i].top),
+            int(personal_data_df.loc[i].width),
+            int(personal_data_df.loc[i].height),
         )
         img = cv2.rectangle(img, (x, y), (x + w, y + h), (0, 0, 0), -1)
     return img

@@ -21,7 +21,7 @@ def add_ext(paths_file: str, fixed_paths: str):
                         os.rename(filename, filename + f".{ftype}")
                         os.chdir(cwd)
                     elif set((ext, ftype)) in ext_pairs:
-                        print(ext, ftype)
+                        # This elif clause allows to leave files with alternative but adequate extension untouched
                         new_paths.write(path + "\n")
                     elif ftype == "None" and ext in accepted_ext:
                         print(f"file {path} is not an image file.")

@@ -26,3 +26,4 @@ include: "rules/post-processing.smk"
 rule all:
     input:
         expand("results/{id}/personal-data-summary.tsv", id=get_all_ids()),
+        expand("results/{id}/moved", id=get_all_ids())

@@ -25,5 +25,4 @@ include: "rules/post-processing.smk"
 # Subsequent target rules can be specified below. They should start with all_*.
 rule all:
     input:
-        expand("results/done/{id}", id=get_all_ids()),
         expand("results/{id}/personal-data-summary.tsv", id=get_all_ids()),

@@ -38,10 +38,3 @@ rule redact_page:
         "../envs/opencv.yaml"
     script:
         "../scripts/redact-page.py"
-
-
-rule redact_all:
-    input:
-        get_processed_pages,
-    output:
-        touch("results/done/{id}"),

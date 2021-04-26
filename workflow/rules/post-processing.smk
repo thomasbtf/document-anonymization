@@ -1,6 +1,7 @@
 rule summarize_found_personal_data:
     input:
-        get_personal_data
+        data = get_personal_data,
+        pages = get_processed_pages
     output:
         "results/{id}/personal-data-summary.tsv",
     log:

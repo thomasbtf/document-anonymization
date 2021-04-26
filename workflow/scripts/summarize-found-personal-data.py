@@ -27,10 +27,12 @@ def summarize_found_personal_data(
         tesseract_output = {"left", "top", "width", "height", "conf", "text"}
         personal_data_columns = set(found_data_df.columns) - tesseract_output
         for column in personal_data_columns:
-            no_found_data = found_data_df[found_data_df[column] <= max_dist][column].shape[0]
+            no_found_data = found_data_df[found_data_df[column] <= max_dist][
+                column
+            ].shape[0]
             if no_found_data > 0:
                 page_summary[column] = no_found_data
-        
+
         summary_list.append(page_summary)
 
     pd.DataFrame(summary_list).to_csv(sm_output, index=False, sep="\t")

@@ -59,31 +59,47 @@ def get_personal_data(wildcards):
     pattern = "results/{{id}}/data-to-redact/{img}.tsv"
     return expand(pattern, img=paths)
 
+
 def get_questionable_imgs(wildcards, case):
     if case == "no_personal_data_found":
-        pattern = "results/{id}/to-check/no_personal_data_found/{{img}}".format(id=wildcards.id)
-        with checkpoints.create_paths_for_manually_checking.get(id=wildcards.id).output.no_personal_data_found.open() as f:
-            paths = pd.read_csv(f, sep="\n", header=None, squeeze=True)
-    
-    elif case == "lots_personal_data_found":
-        pattern = "results/{id}/to-check/lots_personal_data_found/{{img}}".format(id=wildcards.id)
-        with checkpoints.create_paths_for_manually_checking.get(id=wildcards.id).output.no_personal_data_found.open() as f:
-            paths = pd.read_csv(f, sep="\n", header=None, squeeze=True)
-    
-    elif case == "address_not_entirely_found":
-        pattern = "results/{id}/to-check/address_not_entirely_found/{{img}}".format(id=wildcards.id)
-        with checkpoints.create_paths_for_manually_checking.get(id=wildcards.id).output.address_not_entirely_found.open() as f:
-            paths = pd.read_csv(f, sep="\n", header=None, squeeze=True)
-    
-    elif case == "name_not_entirely_found":
-        pattern = "results/{id}/to-check/name_not_entirely_found/{{img}}".format(id=wildcards.id)
-        with checkpoints.create_paths_for_manually_checking.get(id=wildcards.id).output.name_not_entirely_found.open() as f:
+        pattern = "results/{id}/to-check/no_personal_data_found/{{img}}".format(
+            id=wildcards.id
+        )
+        with checkpoints.create_paths_for_manually_checking.get(
+            id=wildcards.id
+        ).output.no_personal_data_found.open() as f:
             paths = pd.read_csv(f, sep="\n", header=None, squeeze=True)
 
-    
+    elif case == "lots_personal_data_found":
+        pattern = "results/{id}/to-check/lots_personal_data_found/{{img}}".format(
+            id=wildcards.id
+        )
+        with checkpoints.create_paths_for_manually_checking.get(
+            id=wildcards.id
+        ).output.no_personal_data_found.open() as f:
+            paths = pd.read_csv(f, sep="\n", header=None, squeeze=True)
+
+    elif case == "address_not_entirely_found":
+        pattern = "results/{id}/to-check/address_not_entirely_found/{{img}}".format(
+            id=wildcards.id
+        )
+        with checkpoints.create_paths_for_manually_checking.get(
+            id=wildcards.id
+        ).output.address_not_entirely_found.open() as f:
+            paths = pd.read_csv(f, sep="\n", header=None, squeeze=True)
+
+    elif case == "name_not_entirely_found":
+        pattern = "results/{id}/to-check/name_not_entirely_found/{{img}}".format(
+            id=wildcards.id
+        )
+        with checkpoints.create_paths_for_manually_checking.get(
+            id=wildcards.id
+        ).output.name_not_entirely_found.open() as f:
+            paths = pd.read_csv(f, sep="\n", header=None, squeeze=True)
+
     paths = [
         path.replace("results/{id}/processed-docs/".format(id=wildcards.id), "")
         for path in paths
     ]
-    
+
     return expand(pattern, img=paths)

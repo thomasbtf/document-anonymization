@@ -10,7 +10,8 @@ from pytesseract import Output
 
 def parse_page(
     image_path: str,
-    out_path: str,
+    out_path_all_text: str,
+    out_path_personal_data: str,
     personal_data_path: dict,
     min_conf: float = 0.6,
     max_dist: int = 2,
@@ -31,9 +32,10 @@ def parse_page(
         personal_data = json.load(json_file)
 
     df = detect_text(img, min_conf)
-    df = select_personal_data(df, personal_data, max_dist)
+    df.to_csv(out_path_all_text, index=False)
 
-    df.to_csv(out_path)
+    df = select_personal_data(df, personal_data, max_dist)
+    df.to_csv(out_path_personal_data, index=False)
 
 
 def detect_text(img: typing.Any, min_conf: float) -> pd.DataFrame:
@@ -138,6 +140,7 @@ if __name__ == "__main__":
     sys.stderr = open(snakemake.log[0], "w")
     parse_page(
         image_path=snakemake.input.preprocessed_page,
-        out_path=snakemake.output[0],
+        out_path_all_text=snakemake.output.all_text,
+        out_path_personal_data=snakemake.output.text_to_redact,
         personal_data_path=snakemake.input.personal_data,
     )

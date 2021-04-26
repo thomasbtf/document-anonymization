@@ -88,21 +88,26 @@ def select_personal_data(
 
         # subset of personal data dict, according to # spaces
         tmp_dict = {
-            key: value.replace(" ", "")
+            key: value.replace("  ", " ")
             for key, value in personal_data.items()
             if value.count(" ") == no_spaces
         }
 
         # shif text to get longer phrases
         if no_spaces > 0:
+            shift_colums = []
             for shift in range(1, no_spaces + 1):
                 # shift text column and aggreagte
+                shift_colums.append("text_" + str(shift))
                 highest_text_column_name = "text_" + str(shift)
-                tmp_df[highest_text_column_name] = tmp_df[
-                    "text_" + str(shift - 1)
-                ] + tmp_df.text_0.shift(-shift).fillna("")
+                tmp_df[highest_text_column_name] = (
+                    tmp_df["text_" + str(shift - 1)]
+                    + " "
+                    + tmp_df.text_0.shift(-shift).fillna("")
+                )
 
                 # shift width column and aggreagte
+                shift_colums.append("width_" + str(shift))
                 highest_width_column_name = "width_" + str(shift)
                 tmp_df[highest_width_column_name] = (
                     tmp_df["width_" + str(shift - 1)]
@@ -110,17 +115,17 @@ def select_personal_data(
                     + tmp_df.width_0 / tmp_df.text_0.str.len()
                 )
 
+            tmp_df["text_0"] = tmp_df[highest_text_column_name]
             tmp_df["width_0"] = tmp_df[highest_width_column_name].astype(int)
-        else:
-            highest_text_column_name = "text_0"
+            tmp_df.drop(columns=shift_colums, inplace=True)
+
+        tmp_df.rename(columns={"text_0": "text", "width_0": "width"}, inplace=True)
 
         # calc edit distances for each key in subsampled dict
         for key, value in tmp_dict.items():
-            tmp_df[key] = tmp_df[highest_text_column_name].apply(
+            tmp_df[key] = tmp_df["text"].apply(
                 lambda text: Levenshtein.distance(value, text)
             )
-
-        tmp_df.rename(columns={"text_0": "text", "width_0": "width"}, inplace=True)
 
         # select entries, where distance is below or equal a threshhold
         query_list = []

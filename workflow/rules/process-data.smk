@@ -29,7 +29,7 @@ rule identify_personal_data:
 rule redact_page:
     input:
         orginal_page="results/{id}/uncompressed-docs/{img}",
-        data_to_redact="results/{id}/data-to-redact/{img}.csv",
+        data_to_redact="results/{id}/data-to-redact/{img}.tsv",
     output:
         "results/{id}/processed-docs/{img}",
     log:
@@ -38,10 +38,3 @@ rule redact_page:
         "../envs/opencv.yaml"
     script:
         "../scripts/redact-page.py"
-
-
-rule redact_all:
-    input:
-        get_processed_pages,
-    output:
-        touch("results/done/{id}"),

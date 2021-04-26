@@ -18,10 +18,11 @@ container: "docker://continuumio/miniconda3"
 include: "rules/common.smk"
 include: "rules/extract-data.smk"
 include: "rules/process-data.smk"
+include: "rules/post-processing.smk"
 
 
 # The first rule should define the default target files
 # Subsequent target rules can be specified below. They should start with all_*.
 rule all:
     input:
-        expand("results/done/{id}", id=get_all_ids()),
+        expand("results/{id}/personal-data-summary.tsv", id=get_all_ids()),

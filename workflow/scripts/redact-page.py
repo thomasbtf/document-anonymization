@@ -15,7 +15,7 @@ def process_page(image_path: str, out_path: str, data_to_redact: str):
         max_dist (int, optional): maximum Levenshtein distance of the found text on the image to the personal data. Defaults to 2.
     """
 
-    df = pd.read_csv(data_to_redact)
+    df = pd.read_csv(data_to_redact, sep="\t")
     img = cv2.imread(image_path)
 
     img = redact(df, img)

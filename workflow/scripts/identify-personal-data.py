@@ -32,10 +32,10 @@ def parse_page(
         personal_data = json.load(json_file)
 
     df = detect_text(img, min_conf)
-    df.to_csv(out_path_all_text, index=False)
+    df.to_csv(out_path_all_text, index=False, sep="\t")
 
     df = select_personal_data(df, personal_data, max_dist)
-    df.to_csv(out_path_personal_data, index=False)
+    df.to_csv(out_path_personal_data, index=False, sep="\t")
 
 
 def detect_text(img: typing.Any, min_conf: float) -> pd.DataFrame:

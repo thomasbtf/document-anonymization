@@ -16,11 +16,12 @@ def parse_page(
     min_conf: float = 0.6,
     max_dist: int = 2,
 ):
-    """Analyzes the passed image and removes personal information.
+    """Analyzes the passed image and identifies personal information on it.
 
     Args:
         image_path (str): path to the image
-        out_path (str): path where the redacted image should be written to
+        out_path_all_text (str): path where all text should be written to
+        out_path_personal_data (str): path where personal data should be written to
         personal_data (dict): path to personal data that should be made unrecognizable
         min_conf (float, optional): minimal OCR confidence score. Defaults to 0.6.
         max_dist (int, optional): maximum Levenshtein distance of the found text on the image to the personal data. Defaults to 2.

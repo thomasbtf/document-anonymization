@@ -4,7 +4,7 @@ rule extract_docs:
     output:
         directory("results/{id}/uncompressed-docs"),
     log:
-        "logs/extract_docs/{id}.log",
+        "logs/{id}/extract_docs.log",
     shell:
         "(mkdir -p {output} && lz4 -dc --no-sparse {input} | tar -xf - -C {output}) 2> {log}"
 

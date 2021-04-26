@@ -38,7 +38,7 @@ def get_all_ids():
 def get_image_paths_for_id(wildcards):
     with checkpoints.fix_file_ext.get(id=wildcards.id).output[0].open() as f:
         paths = pd.read_csv(f, sep="\n", header=None, squeeze=True)
-    
+
     paths = [
         path.replace("results/{id}/uncompressed-docs/".format(id=wildcards.id), "")
         for path in paths
@@ -52,6 +52,7 @@ def get_processed_pages(wildcards):
     paths = get_image_paths_for_id(wildcards)
     pattern = "results/{{id}}/processed-docs/{img}"
     return expand(pattern, img=paths)
+
 
 def get_personal_data(wildcards):
     paths = get_image_paths_for_id(wildcards)

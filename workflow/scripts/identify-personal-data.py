@@ -67,17 +67,17 @@ def detect_text(img: typing.Any, min_conf: float) -> pd.DataFrame:
 
 
 def select_personal_data(
-    detected_text_df: pd.DataFrame, personal_data: dict, min_distance: int
+    detected_text_df: pd.DataFrame, personal_data: dict, max_dist: int
 ) -> pd.DataFrame:
     """Identifies personal data from the detected text.
 
     Args:
         detected_text_df (pd.DataFrame): detected text on the image.
         personal_data (dict): personal data to be masked out
-        min_distance (int): maximum Levenshtein distance of the found text on the image to the personal data.
+        max_dist (int): maximum Levenshtein distance of the found text on the image to the personal data.
 
     Returns:
-        pd.DataFrame: person data with location on image, filtered by min_distance.
+        pd.DataFrame: person data with location on image, filtered by max_dist.
     """
 
     final_df = pd.DataFrame(columns=["left", "top", "width", "height", "conf", "text"])
@@ -131,7 +131,7 @@ def select_personal_data(
         # select entries, where distance is below or equal a threshhold
         query_list = []
         for col in tmp_dict.keys():
-            query_list.append(f"{col}<={min_distance}")
+            query_list.append(f"{col}<={max_dist}")
 
         # if query list is not empty, thus personal data was found,
         # then append filtered df
@@ -149,4 +149,6 @@ if __name__ == "__main__":
         out_path_all_text=snakemake.output.all_text,
         out_path_personal_data=snakemake.output.text_to_redact,
         personal_data_path=snakemake.input.personal_data,
+        min_conf=snakemake.config["min-confidence"],
+        max_dist=snakemake.config["max-distance"],
     )

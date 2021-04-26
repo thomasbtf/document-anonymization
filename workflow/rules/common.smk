@@ -55,5 +55,5 @@ def get_processed_pages(wildcards):
 
 def get_personal_data(wildcards):
     paths = get_image_paths_for_id(wildcards)
-    pattern = "results/{{id}}/data-to-redact/{img}.csv"
+    pattern = "results/{{id}}/data-to-redact/{img}.tsv"
     return expand(pattern, img=paths)

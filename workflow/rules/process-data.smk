@@ -16,8 +16,8 @@ rule identify_personal_data:
         preprocessed_page="results/{id}/preprocessed-docs/{img}",
         personal_data="results/{id}/personal-data.json",
     output:
-        text_to_redact="results/{id}/data-to-redact/{img}.csv",
-        all_text="results/{id}/detected-text/{img}.csv",
+        text_to_redact="results/{id}/data-to-redact/{img}.tsv",
+        all_text="results/{id}/detected-text/{img}.tsv",
     log:
         "logs/{id}/identify-personal-data/{img}.log",
     conda:
@@ -29,7 +29,7 @@ rule identify_personal_data:
 rule redact_page:
     input:
         orginal_page="results/{id}/uncompressed-docs/{img}",
-        data_to_redact="results/{id}/data-to-redact/{img}.csv",
+        data_to_redact="results/{id}/data-to-redact/{img}.tsv",
     output:
         "results/{id}/processed-docs/{img}",
     log:

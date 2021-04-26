@@ -8,7 +8,7 @@ def summarize_found_personal_data(sm_input: list[str], sm_output: str):
     summary_list=[]
     for path in sm_input:
         page_summary = defaultdict()
-        found_data_df = pd.read_csv(path)
+        found_data_df = pd.read_csv(path, sep="\t")
 
         page_summary["# personal data"] = found_data_df.shape[0]
 

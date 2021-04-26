@@ -88,7 +88,7 @@ def select_personal_data(
 
         # subset of personal data dict, according to # spaces
         tmp_dict = {
-            key: value.replace("  ", " ")
+            key: value
             for key, value in personal_data.items()
             if value.count(" ") == no_spaces
         }

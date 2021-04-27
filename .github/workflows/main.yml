@@ -66,12 +66,6 @@ jobs:
           echo "::set-output name=date::$(/bin/date -u "+%Y%m%d")"
         shell: bash
 
-      - name: Install libGL.so.1
-        run: |
-          sudo apt update
-          sudo apt-get install ffmpeg libsm6 libxext6  -y
-        shell: bash
-
       - name: Cache dependencies
         id: test-dependencies
         uses: actions/cache@v2
@@ -88,7 +82,7 @@ jobs:
         with:
           directory: .tests
           snakefile: workflow/Snakefile
-          stagein: mamba install -n snakemake -c conda-forge peppy -y
+          stagein: mamba install -n snakemake -c conda-forge peppy -y && sudo apt update && sudo apt-get install ffmpeg libsm6 libxext6  -y
           args: "--use-conda --show-failed-logs --cores 2 --conda-cleanup-pkgs cache --conda-frontend mamba ${{ matrix.rule }}"
 
       - name: Test report

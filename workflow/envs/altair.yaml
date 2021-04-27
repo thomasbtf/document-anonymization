@@ -1,0 +1,6 @@
+channels:
+  - conda-forge
+  - anaconda
+dependencies:  
+  - altair =4.1
+  - altair_saver =0.5

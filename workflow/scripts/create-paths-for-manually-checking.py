@@ -8,24 +8,24 @@ def save_df(df: pd.DataFrame, out_path: str):
     df.to_csv(out_path, sep="\t", index=False, header=False)
 
 
-def no_personal_data_found(summary_df: pd.DataFrame, out_path: str):
+def no_redaction(summary_df: pd.DataFrame, out_path: str):
     save_df(summary_df[summary_df["# personal data"] == 0][["processed img"]], out_path)
 
 
-def lots_personal_data_found(summary_df: pd.DataFrame, out_path: str):
+def high_degree_of_redaction(summary_df: pd.DataFrame, out_path: str):
     save_df(
         summary_df[summary_df["# personal data"] >= 10][["processed img"]], out_path
     )
 
 
-def address_not_entirely_found(summary_df: pd.DataFrame, out_path: str):
+def partly_found_address(summary_df: pd.DataFrame, out_path: str):
     save_df(
         summary_df[summary_df["city"] != summary_df["city"]][["processed img"]],
         out_path,
     )
 
 
-def name_not_entirely_found(summary_df: pd.DataFrame, out_path: str):
+def partly_found_name(summary_df: pd.DataFrame, out_path: str):
     save_df(
         summary_df[summary_df["name_family"] != summary_df["name_first_0"]][
             ["processed img"]
@@ -36,7 +36,7 @@ def name_not_entirely_found(summary_df: pd.DataFrame, out_path: str):
 
 if __name__ == "__main__":
     summary_df = pd.read_csv(snakemake.input[0], sep="\t")
-    no_personal_data_found(summary_df, snakemake.output.no_personal_data_found)
-    lots_personal_data_found(summary_df, snakemake.output.lots_personal_data_found)
-    address_not_entirely_found(summary_df, snakemake.output.address_not_entirely_found)
-    name_not_entirely_found(summary_df, snakemake.output.name_not_entirely_found)
+    no_redaction(summary_df, snakemake.output.no_redaction)
+    high_degree_of_redaction(summary_df, snakemake.output.high_degree_of_redaction)
+    partly_found_address(summary_df, snakemake.output.partly_found_address)
+    partly_found_name(summary_df, snakemake.output.partly_found_name)

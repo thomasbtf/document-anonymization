@@ -14,76 +14,76 @@ checkpoint create_paths_for_manually_checking:
     input:
         "results/{id}/personal-data-summary.tsv",
     output:
-        no_personal_data_found="results/{id}/no_personal_data_found.tsv",
-        lots_personal_data_found="results/{id}/lots_personal_data_found.tsv",
-        address_not_entirely_found="results/{id}/address_not_entirely_found.tsv",
-        name_not_entirely_found="results/{id}/name_not_entirely_found.tsv",
+        no_redaction="results/{id}/no_redaction.tsv",
+        high_degree_of_redaction="results/{id}/high_degree_of_redaction.tsv",
+        partly_found_address="results/{id}/partly_found_address.tsv",
+        partly_found_name="results/{id}/partly_found_name.tsv",
     log:
         "logs/{id}/create_paths_for_manually_checking.log",
     script:
         "../scripts/create-paths-for-manually-checking.py"
 
 
-rule cp_no_personal_data_found:
+rule cp_no_redaction:
     input:
         "results/{id}/processed-docs/{img}",
     output:
         report(
-            "results/{id}/to-check/no_personal_data_found/{img}",
-            caption="../report/test.rst",
-            category="No Data Found",
+            "results/{id}/to-check/no_redaction/{img}",
+            caption="../report/no_redaction.rst",
+            category="2. No redaction",
             subcategory="{id}",
         ),
     log:
-        "logs/{id}/cp_no_personal_data_found/{img}.log",
+        "logs/{id}/cp_no_redaction/{img}.log",
     shell:
         "(cp '{input}' '{output}') 2> '{log}'"
 
 
-rule cp_lots_personal_data_found:
+rule cp_high_degree_of_redaction:
     input:
         "results/{id}/processed-docs/{img}",
     output:
         report(
-            "results/{id}/to-check/lots_personal_data_found/{img}",
-            caption="../report/test.rst",
-            category="Lot of Data Found",
+            "results/{id}/to-check/high_degree_of_redaction/{img}",
+            caption="../report/high_degree_of_redaction.rst",
+            category="3. High degree of redaction",
             subcategory="{id}",
         ),
     log:
-        "logs/{id}/cp_lots_personal_data_found/{img}.log",
+        "logs/{id}/cp_high_degree_of_redaction/{img}.log",
     shell:
         "(cp '{input}' '{output}') 2> '{log}'"
 
 
-rule cp_address_not_entirely_found:
+rule cp_partly_found_address:
     input:
         "results/{id}/processed-docs/{img}",
     output:
         report(
-            "results/{id}/to-check/address_not_entirely_found/{img}",
-            caption="../report/test.rst",
-            category="Address Not Entirely Found",
+            "results/{id}/to-check/partly_found_address/{img}",
+            caption="../report/partly_found_address.rst",
+            category="4. Partly found address",
             subcategory="{id}",
         ),
     log:
-        "logs/{id}/cp_address_not_entirely_found/{img}.log",
+        "logs/{id}/cp_partly_found_address/{img}.log",
     shell:
         "(cp '{input}' '{output}') 2> '{log}'"
 
 
-rule cp_name_not_entirely_found:
+rule cp_partly_found_name:
     input:
         "results/{id}/processed-docs/{img}",
     output:
         report(
-            "results/{id}/to-check/name_not_entirely_found/{img}",
-            caption="../report/test.rst",
-            category="Name Not Entirely Found",
+            "results/{id}/to-check/partly_found_name/{img}",
+            caption="../report/partly_found_name.rst",
+            category="5. Partly found names",
             subcategory="{id}",
         ),
     log:
-        "logs/{id}/cp_name_not_entirely_found/{img}.log",
+        "logs/{id}/cp_partly_found_name/{img}.log",
     shell:
         "(cp '{input}' '{output}') 2> '{log}'"
 
@@ -91,18 +91,47 @@ rule cp_name_not_entirely_found:
 rule move_questionable_imgs:
     input:
         lambda wildcards: get_questionable_imgs(
-            wildcards, case="no_personal_data_found"
+            wildcards, case="no_redaction"
         ),
         lambda wildcards: get_questionable_imgs(
-            wildcards, case="lots_personal_data_found"
+            wildcards, case="high_degree_of_redaction"
         ),
         lambda wildcards: get_questionable_imgs(
-            wildcards, case="address_not_entirely_found"
+            wildcards, case="partly_found_address"
         ),
         lambda wildcards: get_questionable_imgs(
-            wildcards, case="name_not_entirely_found"
+            wildcards, case="partly_found_name"
         ),
     output:
         touch("results/{id}/moved"),
     log:
         "logs/{id}/move_questionable_imgs.log",
+
+
+rule summarize_manuel_checks:
+    input:
+        manuel_checks = rules.create_paths_for_manually_checking.output,
+        total_imgs_processed = "results/{id}/personal-data-summary.tsv"
+    output:
+        "results/{id}/manuel_check_summary.tsv",
+    log:
+        "logs/{id}/summarize_manuel_checks.log"
+    script:
+        "../scripts/summarize-manuel-checks.py"
+
+
+rule plot_manuel_check_summary:
+    input:
+        "results/{id}/manuel_check_summary.tsv",
+    output:
+        report(
+            "results/{id}/plots/summary-for-{id}.svg",
+            caption="../report/manuel_check_summary.rst",
+            category="1. Overview",
+        )
+    log:
+        "logs/{id}/plot_manuel_check_summary.log"
+    conda:
+        "../envs/altair.yaml"
+    script:
+        "../scripts/plot-manuel-check-summary.py"

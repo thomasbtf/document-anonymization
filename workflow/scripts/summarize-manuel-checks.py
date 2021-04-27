@@ -17,7 +17,7 @@ def summarize_manuel_checks(
     ).shape[0]
 
     for path in paths_to_manuell_check_files:
-        header = splitext(basename(path))[0].replace("_", " ")
+        header = splitext(basename(path))[0].replace("_", " ").replace("-", " ")
         count = pd.read_csv(path, sep="\t", names=[header]).shape[0]
         summary_dict[header] = count
 

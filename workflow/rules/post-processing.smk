@@ -14,10 +14,10 @@ checkpoint create_paths_for_manually_checking:
     input:
         "results/{id}/personal-data-summary.tsv",
     output:
-        no_redaction="results/{id}/no_redaction.tsv",
-        high_degree_of_redaction="results/{id}/high_degree_of_redaction.tsv",
-        partly_found_address="results/{id}/partly_found_address.tsv",
-        partly_found_name="results/{id}/partly_found_name.tsv",
+        no_redaction="results/{id}/no-redaction.tsv",
+        high_degree_of_redaction="results/{id}/high-degree-of-redaction.tsv",
+        partly_found_address="results/{id}/partly-found-address.tsv",
+        partly_found_name="results/{id}/partly-found-name.tsv",
     log:
         "logs/{id}/create_paths_for_manually_checking.log",
     script:

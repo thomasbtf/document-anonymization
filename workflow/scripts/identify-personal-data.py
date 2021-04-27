@@ -94,7 +94,7 @@ def select_personal_data(
             if value.count(" ") == no_spaces
         }
 
-        # shif text to get longer phrases
+        # shift text to get longer phrases
         if no_spaces > 0:
             shift_colums = []
             for shift in range(1, no_spaces + 1):

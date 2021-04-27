@@ -16,11 +16,12 @@ def parse_page(
     min_conf: float = 0.6,
     max_dist: int = 2,
 ):
-    """Analyzes the passed image and removes personal information.
+    """Analyzes the passed image and identifies personal information on it.
 
     Args:
         image_path (str): path to the image
-        out_path (str): path where the redacted image should be written to
+        out_path_all_text (str): path where all text should be written to
+        out_path_personal_data (str): path where personal data should be written to
         personal_data (dict): path to personal data that should be made unrecognizable
         min_conf (float, optional): minimal OCR confidence score. Defaults to 0.6.
         max_dist (int, optional): maximum Levenshtein distance of the found text on the image to the personal data. Defaults to 2.
@@ -66,17 +67,17 @@ def detect_text(img: typing.Any, min_conf: float) -> pd.DataFrame:
 
 
 def select_personal_data(
-    detected_text_df: pd.DataFrame, personal_data: dict, min_distance: int
+    detected_text_df: pd.DataFrame, personal_data: dict, max_dist: int
 ) -> pd.DataFrame:
     """Identifies personal data from the detected text.
 
     Args:
         detected_text_df (pd.DataFrame): detected text on the image.
         personal_data (dict): personal data to be masked out
-        min_distance (int): maximum Levenshtein distance of the found text on the image to the personal data.
+        max_dist (int): maximum Levenshtein distance of the found text on the image to the personal data.
 
     Returns:
-        pd.DataFrame: person data with location on image, filtered by min_distance.
+        pd.DataFrame: person data with location on image, filtered by max_dist.
     """
 
     final_df = pd.DataFrame(columns=["left", "top", "width", "height", "conf", "text"])
@@ -88,21 +89,26 @@ def select_personal_data(
 
         # subset of personal data dict, according to # spaces
         tmp_dict = {
-            key: value.replace(" ", "")
+            key: value
             for key, value in personal_data.items()
             if value.count(" ") == no_spaces
         }
 
         # shif text to get longer phrases
         if no_spaces > 0:
+            shift_colums = []
             for shift in range(1, no_spaces + 1):
                 # shift text column and aggreagte
+                shift_colums.append("text_" + str(shift))
                 highest_text_column_name = "text_" + str(shift)
-                tmp_df[highest_text_column_name] = tmp_df[
-                    "text_" + str(shift - 1)
-                ] + tmp_df.text_0.shift(-shift).fillna("")
+                tmp_df[highest_text_column_name] = (
+                    tmp_df["text_" + str(shift - 1)]
+                    + " "
+                    + tmp_df.text_0.shift(-shift).fillna("")
+                )
 
                 # shift width column and aggreagte
+                shift_colums.append("width_" + str(shift))
                 highest_width_column_name = "width_" + str(shift)
                 tmp_df[highest_width_column_name] = (
                     tmp_df["width_" + str(shift - 1)]
@@ -110,22 +116,22 @@ def select_personal_data(
                     + tmp_df.width_0 / tmp_df.text_0.str.len()
                 )
 
+            tmp_df["text_0"] = tmp_df[highest_text_column_name]
             tmp_df["width_0"] = tmp_df[highest_width_column_name].astype(int)
-        else:
-            highest_text_column_name = "text_0"
+            tmp_df.drop(columns=shift_colums, inplace=True)
+
+        tmp_df.rename(columns={"text_0": "text", "width_0": "width"}, inplace=True)
 
         # calc edit distances for each key in subsampled dict
         for key, value in tmp_dict.items():
-            tmp_df[key] = tmp_df[highest_text_column_name].apply(
+            tmp_df[key] = tmp_df["text"].apply(
                 lambda text: Levenshtein.distance(value, text)
             )
-
-        tmp_df.rename(columns={"text_0": "text", "width_0": "width"}, inplace=True)
 
         # select entries, where distance is below or equal a threshhold
         query_list = []
         for col in tmp_dict.keys():
-            query_list.append(f"{col}<={min_distance}")
+            query_list.append(f"{col}<={max_dist}")
 
         # if query list is not empty, thus personal data was found,
         # then append filtered df
@@ -143,4 +149,6 @@ if __name__ == "__main__":
         out_path_all_text=snakemake.output.all_text,
         out_path_personal_data=snakemake.output.text_to_redact,
         personal_data_path=snakemake.input.personal_data,
+        min_conf=snakemake.config["min-confidence"],
+        max_dist=snakemake.config["max-distance"],
     )

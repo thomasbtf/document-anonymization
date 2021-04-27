@@ -66,6 +66,12 @@ jobs:
           echo "::set-output name=date::$(/bin/date -u "+%Y%m%d")"
         shell: bash
 
+      - name: Install libGL.so.1
+        run: |
+          sudo apt update
+          sudo apt install libgl1-mesa-glx
+        shell: bash
+
       - name: Cache dependencies
         id: test-dependencies
         uses: actions/cache@v2

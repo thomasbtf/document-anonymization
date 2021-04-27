@@ -1,7 +1,8 @@
 *
 !.github
 !.github/**
-!.test
+!.tests
+!.tests/**
 !config
 !config/**
 !resources

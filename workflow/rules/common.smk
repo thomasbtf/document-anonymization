@@ -42,10 +42,9 @@ def get_image_paths_for_id(wildcards):
     paths = [
         path.replace("results/{id}/uncompressed-docs/".format(id=wildcards.id), "")
         for path in paths
-        if ".snakemake" not in path
-        and ".DS_Store" not in path
+        if ".snakemake" not in path and ".DS_Store" not in path
     ]
-    
+
     return paths
 
 
@@ -60,11 +59,13 @@ def get_personal_data(wildcards):
     pattern = "results/{{id}}/data-to-redact/{img}.tsv"
     return expand(pattern, img=paths)
 
+
 def load_tsv(f):
     try:
         return pd.read_csv(f, sep="\n", header=None, squeeze=True)
     except pd.errors.EmptyDataError:
         return []
+
 
 def get_questionable_imgs(wildcards, case):
     if case == "no_redaction":

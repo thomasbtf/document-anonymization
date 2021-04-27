@@ -90,18 +90,12 @@ rule cp_partly_found_name:
 
 rule move_questionable_imgs:
     input:
-        lambda wildcards: get_questionable_imgs(
-            wildcards, case="no_redaction"
-        ),
+        lambda wildcards: get_questionable_imgs(wildcards, case="no_redaction"),
         lambda wildcards: get_questionable_imgs(
             wildcards, case="high_degree_of_redaction"
         ),
-        lambda wildcards: get_questionable_imgs(
-            wildcards, case="partly_found_address"
-        ),
-        lambda wildcards: get_questionable_imgs(
-            wildcards, case="partly_found_name"
-        ),
+        lambda wildcards: get_questionable_imgs(wildcards, case="partly_found_address"),
+        lambda wildcards: get_questionable_imgs(wildcards, case="partly_found_name"),
     output:
         touch("results/{id}/moved"),
     log:
@@ -110,12 +104,12 @@ rule move_questionable_imgs:
 
 rule summarize_manuel_checks:
     input:
-        manuel_checks = rules.create_paths_for_manually_checking.output,
-        total_imgs_processed = "results/{id}/personal-data-summary.tsv"
+        manuel_checks=rules.create_paths_for_manually_checking.output,
+        total_imgs_processed="results/{id}/personal-data-summary.tsv",
     output:
         "results/{id}/manuel_check_summary.tsv",
     log:
-        "logs/{id}/summarize_manuel_checks.log"
+        "logs/{id}/summarize_manuel_checks.log",
     script:
         "../scripts/summarize-manuel-checks.py"
 
@@ -128,9 +122,9 @@ rule plot_manuel_check_summary:
             "results/{id}/plots/summary-for-{id}.svg",
             caption="../report/manuel_check_summary.rst",
             category="1. Overview",
-        )
+        ),
     log:
-        "logs/{id}/plot_manuel_check_summary.log"
+        "logs/{id}/plot_manuel_check_summary.log",
     conda:
         "../envs/altair.yaml"
     script:

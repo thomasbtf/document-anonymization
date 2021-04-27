@@ -62,9 +62,7 @@ def get_personal_data(wildcards):
 
 def get_questionable_imgs(wildcards, case):
     if case == "no_redaction":
-        pattern = "results/{id}/to-check/no_redaction/{{img}}".format(
-            id=wildcards.id
-        )
+        pattern = "results/{id}/to-check/no_redaction/{{img}}".format(id=wildcards.id)
         with checkpoints.create_paths_for_manually_checking.get(
             id=wildcards.id
         ).output.no_redaction.open() as f:

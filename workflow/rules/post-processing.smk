@@ -80,7 +80,6 @@ rule cp_partly_found_name:
             "results/{id}/to-check/partly_found_name/{img}",
             caption="../report/partly_found_name.rst",
             category="5. Partly found names",
-            subcategory="{id}",
         ),
     log:
         "logs/{id}/cp_partly_found_name/{img}.log",

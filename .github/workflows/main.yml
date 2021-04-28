@@ -108,5 +108,12 @@ jobs:
           name: log-${{ matrix.rule }}
           path: .tests/logs/
 
+      - name: Upload results
+        if: startsWith(matrix.rule, 'all -npr') != true
+        uses: actions/upload-artifact@v2
+        with:
+          name: results-${{ matrix.rule }}
+          path: .tests/results/
+
       - name: Change permissions for caching
         run: sudo chmod -R 755 .tests/.snakemake/conda

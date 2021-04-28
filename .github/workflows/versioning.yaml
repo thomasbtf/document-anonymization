@@ -54,11 +54,11 @@ jobs:
           git config --global user.email "thomas.battenfeld@gmail.com"
           git config --global user.name "Version Bot"
 
-      - name: Stage changed files
-        run: git add .
+      - name: Stage changed file
+        run: git add resources/version.txt
 
       - name: Commit changed files
-        run: git commit -m "[Bot] Auto updating version to ${{ steps.get-nversion.outputs.nversion }}"
+        run: git commit -m "[Bot] Updating version to ${{ steps.get-nversion.outputs.nversion }}"
 
       - name: Fetch from master
         run: git fetch origin master

@@ -4,21 +4,19 @@ import cv2
 import pandas as pd
 
 
-def process_page(image_path: str, out_path: str, data_to_redact: str):
+def process_page(image_path: str, out_path: str, data_to_redact: str, version: str):
     """Analyzes the passed image and removes personal information.
 
     Args:
         image_path (str): path to the image
         out_path (str): path where the redacted image should be written to
-        personal_data (dict): path to personal data that should be made unrecognizable
-        min_conf (float, optional): minimal OCR confidence score. Defaults to 0.6.
-        max_dist (int, optional): maximum Levenshtein distance of the found text on the image to the personal data. Defaults to 2.
+        version (str): version number of the workflow
     """
 
     df = pd.read_csv(data_to_redact, sep="\t")
     img = cv2.imread(image_path)
 
-    img = add_watermark(img)
+    img = add_watermark(img, version)
     img = redact(df, img)
 
     if not ".jpg" in out_path[-3:]:
@@ -27,9 +25,9 @@ def process_page(image_path: str, out_path: str, data_to_redact: str):
     cv2.imwrite(out_path, img)
 
 
-def add_watermark(img: typing.Any) -> typing.Any:
+def add_watermark(img: typing.Any, version: str) -> typing.Any:
     x, y = 50, 50
-    watermark_text = "anonymized by DocNo v0.1.0"
+    watermark_text = "anonymized by DocNo {}".format(version)
     cv2.putText(img, watermark_text, (x, y), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 2)
     return img
 
@@ -58,8 +56,10 @@ def redact(personal_data_df: pd.DataFrame, img: typing.Any) -> typing.Any:
 
 if __name__ == "__main__":
     sys.stderr = open(snakemake.log[0], "w")
+    version = snakemake.params.get("version", "")
     process_page(
         image_path=snakemake.input.orginal_page,
         out_path=snakemake.output[0],
         data_to_redact=snakemake.input.data_to_redact,
+        version = version
     )

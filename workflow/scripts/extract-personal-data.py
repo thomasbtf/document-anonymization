@@ -1,3 +1,5 @@
+sys.stderr = open(snakemake.log[0], "w")
+
 import json
 from collections import defaultdict
 import sys
@@ -117,8 +119,6 @@ def save_personal_data(personal_data: dict, out_path: str):
 
 
 if __name__ == "__main__":
-    sys.stderr = open(snakemake.log[0], "w")
-
     personal_data = parse_meta_data(snakemake.input[0])
     var_data = variate_personal_data(personal_data[0], personal_data[1])
     # TODO enrich the personal data. Other examples below

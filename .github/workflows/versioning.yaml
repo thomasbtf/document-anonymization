@@ -72,11 +72,20 @@ jobs:
     runs-on: "ubuntu-latest"
     needs: bump-patch
     steps:
+
+      - uses: actions/checkout@v2
+
+    - name: Get new version
+        id: get-nversion
+        run: |
+          echo "::set-output name=nversion::$(cat resources/version.txt)"
+        shell: bash
+
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           automatic_release_tag: "latest"
           prerelease: true
-          title: "Development Build"
+          title: "Development Build ${{ steps.get-nversion.outputs.nversion }}"
           files: |
             LICENSE

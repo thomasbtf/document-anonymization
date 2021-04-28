@@ -69,11 +69,11 @@ jobs:
 
       - uses: actions/checkout@v2
 
-    - name: Get new version
-        id: get-nversion
-        run: |
-          echo "::set-output name=nversion::$(cat resources/version.txt)"
-        shell: bash
+      - name: Get new version
+          id: get-nversion
+          run: |
+            echo "::set-output name=nversion::$(cat resources/version.txt)"
+          shell: bash
 
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:

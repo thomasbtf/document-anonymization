@@ -29,7 +29,7 @@ def process_page(image_path: str, out_path: str, data_to_redact: str):
 
 def add_watermark(img: typing.Any) -> typing.Any:
     x, y = 50, 50
-    watermark_text = "anonymized by DocNo v0.1"
+    watermark_text = "anonymized by DocNo v0.1.0"
     cv2.putText(img, watermark_text, (x, y), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 2)
     return img
 

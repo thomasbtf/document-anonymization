@@ -18,7 +18,7 @@ jobs:
         run: sudo apt-get install tree
 
       - name: Print tree
-        run: tree .tests/ -C
+        run: tree -C
 
       - name: Set up Python
         uses: actions/setup-python@v2

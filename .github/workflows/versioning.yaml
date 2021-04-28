@@ -44,7 +44,7 @@ jobs:
       - name: Update resources
         uses: test-room-7/action-update-file@v1
         with:
-            file-path: resources/version
+            file-path: resources/version.txt
             commit-msg: Update version to ${{ steps.get-version.outputs.version }}
             github-token: ${{ secrets.GITHUB_TOKEN }}
 

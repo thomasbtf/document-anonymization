@@ -19,15 +19,15 @@ jobs:
 
       - name: Install dependencies
         run: pip install bump2version
-      
-      - name: Print old version
-        run: echo "test ${{ steps.getversion.outputs.version }}""
-      
+
       - name: Get current version
         id: get-version
         run: |
           echo "::set-output name=version::$(cat resources/version.txt)"
         shell: bash
+      
+      - name: Print old version
+        run: echo "test ${{ steps.getversion.outputs.version }}""
 
       - name: Bump patch
         run: bump2version --current-version ${{ steps.getversion.outputs.version }} patch resources/version.txt

@@ -4,6 +4,8 @@ on:
   push:
     branches: 
       - master
+    paths-ignore:
+      - 'resources/version.txt'
   pull_request:
     branches:
       - "*"
@@ -13,6 +15,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+            token: ${{ secrets.ADMIN_TOKEN }}
 
       - name: Install tree
         run: sudo apt-get install tree

@@ -48,8 +48,8 @@ jobs:
       #       commit-msg: Update version to ${{ steps.get-version.outputs.version }}
       #       github-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Switching from HTTPS to SSH
-        run: git remote set-url origin ${{ secrets.ssh }}
+      # - name: Switching from HTTPS to SSH
+      #   run: git remote set-url origin ${{ secrets.ssh }}
 
       - name: Check for changes
         run: git status

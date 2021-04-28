@@ -61,5 +61,5 @@ if __name__ == "__main__":
         image_path=snakemake.input.orginal_page,
         out_path=snakemake.output[0],
         data_to_redact=snakemake.input.data_to_redact,
-        version = version
+        version=version,
     )

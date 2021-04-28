@@ -1,4 +1,4 @@
-# DocNo - Document Pseudonymization Based on FHIR Data
+# DocNo - Document Pseudonymization
 
 [![Snakemake](https://img.shields.io/badge/snakemake-≥6.1.1-brightgreen.svg)](https://snakemake.bitbucket.io)
 [![GitHub actions status](https://github.com/thomasbtf/document-anonymization/workflows/Tests/badge.svg?branch=master)](https://github.com/thomasbtf/document-anonymization/actions?query=branch%3Amaster+workflow%3ATests)

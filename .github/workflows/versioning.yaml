@@ -21,7 +21,7 @@ jobs:
         run: pip install bump2version
       
       - name: Print old version
-        run: cat ${{ steps.getversion.outputs.version }}
+        run: echo ${{ steps.getversion.outputs.version }}
       
       - name: Get current version
         id: get-version
@@ -33,7 +33,7 @@ jobs:
         run: bump2version --current-version ${{ steps.getversion.outputs.version }} patch resources/version.txt
       
       - name: Print new version
-        run: cat resources/version.txt
+        run: echo resources/version.txt
 
 
 

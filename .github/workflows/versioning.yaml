@@ -41,12 +41,30 @@ jobs:
       - name: Print new version
         run: cat resources/version.txt
 
-      - name: Update resources
-        uses: test-room-7/action-update-file@v1
-        with:
-            file-path: resources/version.txt
-            commit-msg: Update version to ${{ steps.get-version.outputs.version }}
-            github-token: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Update resources
+      #   uses: test-room-7/action-update-file@v1
+      #   with:
+      #       file-path: resources/version.txt
+      #       commit-msg: Update version to ${{ steps.get-version.outputs.version }}
+      #       github-token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Switching from HTTPS to SSH
+      run: git remote set-url origin ${{ secrets.ssh }}
+
+    - name: Check for changes
+      run: git status
+
+    - name: Stage changed files
+      run: git add .
+
+    - name: Commit changed files
+      run: git commit -m "Auto updating version to ${{ steps.get-version.outputs.version }}"
+
+    - name: Fetch from master
+      run: git fetch origin master
+
+    - name: Push code to master
+      run: git push origin HEAD:master
 
 
 

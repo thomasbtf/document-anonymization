@@ -1,0 +1,40 @@
+name: Versioning
+
+on:
+  push:
+    branches: 
+      - master
+  pull_request:
+    branches:
+      - "*"
+
+Bump-Patch:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+
+    - name: Install dependencies
+      run: pip install bump2version
+    
+    - name: Get current version
+        id: get-version
+        run: |
+          echo "::set-output name=version::$(cat resources/version.txt)"
+        shell: bash
+
+    - name: Bump patch
+      run: bump2version --current-version ${{ steps.getversion.outputs.version }} patch resources/version.txt
+    
+    - name: Print new name
+      run: cat resources/version.txt
+
+
+
+
+
+
+
+

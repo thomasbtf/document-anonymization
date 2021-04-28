@@ -113,6 +113,7 @@ def get_questionable_imgs(wildcards, case):
 def get_resource(name):
     return str((Path(workflow.snakefile).parent.parent / "resources") / name)
 
+
 def get_version():
     with open(get_resource("version.txt"), "r") as v:
         return v.readline().replace("\n", "")

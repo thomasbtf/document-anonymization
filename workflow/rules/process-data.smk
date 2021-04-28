@@ -33,7 +33,7 @@ rule redact_page:
     output:
         "results/{id}/processed-docs/{img}",
     params:
-        version = get_version()
+        version=get_version(),
     log:
         "logs/{id}/redact-page/{img}.log",
     conda:

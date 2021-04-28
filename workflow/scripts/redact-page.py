@@ -18,12 +18,18 @@ def process_page(image_path: str, out_path: str, data_to_redact: str):
     df = pd.read_csv(data_to_redact, sep="\t")
     img = cv2.imread(image_path)
 
+    img = add_watermark(img)
     img = redact(df, img)
 
     if not ".jpg" in out_path[-3:]:
         "".join([out_path, ".jpg"])
 
     cv2.imwrite(out_path, img)
+
+def add_watermark(img: typing.Any) -> typing.Any:
+    x, y = 50, 50
+    cv2.putText(img, "v0.1", (x,y), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,0), 2)
+    return img
 
 
 def redact(personal_data_df: pd.DataFrame, img: typing.Any) -> typing.Any:

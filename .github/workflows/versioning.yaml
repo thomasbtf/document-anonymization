@@ -8,7 +8,8 @@ on:
       - 'resources/version.txt'
 
 jobs:
-  Bump-Patch:
+  bump-patch:
+    name: "Bump Patch"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -48,16 +49,6 @@ jobs:
       - name: Print new version
         run: echo "${{ steps.get-version.outputs.version }}"
 
-      # - name: Update resources
-      #   uses: test-room-7/action-update-file@v1
-      #   with:
-      #       file-path: resources/version.txt
-      #       commit-msg: Update version to ${{ steps.get-version.outputs.version }}
-      #       github-token: ${{ secrets.GITHUB_TOKEN }}
-
-      # - name: Switching from HTTPS to SSH
-      #   run: git remote set-url origin ${{ secrets.ssh }}
-
       - name: Set up identity
         run: |
           git config --global user.email "thomas.battenfeld@gmail.com"
@@ -67,7 +58,7 @@ jobs:
         run: git add .
 
       - name: Commit changed files
-        run: git commit -m "Auto updating version to ${{ steps.get-nversion.outputs.nversion }}"
+        run: git commit -m "[Bot] Auto updating version to ${{ steps.get-nversion.outputs.nversion }}"
 
       - name: Fetch from master
         run: git fetch origin master
@@ -76,9 +67,16 @@ jobs:
         run: git push -f origin HEAD:master
 
 
-
-
-
-
-
-
+  pre-release:
+    name: "Pre Release"
+    runs-on: "ubuntu-latest"
+    needs: bump-patch
+    steps:
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "latest"
+          prerelease: true
+          title: "Development Build"
+          files: |
+            LICENSE

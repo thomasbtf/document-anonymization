@@ -21,7 +21,7 @@ jobs:
         run: pip install bump2version
       
       - name: Print old version
-        run: ${{ steps.getversion.outputs.version }}
+        run: cat ${{ steps.getversion.outputs.version }}
       
       - name: Get current version
         id: get-version

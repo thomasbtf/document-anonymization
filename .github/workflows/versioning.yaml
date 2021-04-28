@@ -48,23 +48,23 @@ jobs:
       #       commit-msg: Update version to ${{ steps.get-version.outputs.version }}
       #       github-token: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Switching from HTTPS to SSH
-      run: git remote set-url origin ${{ secrets.ssh }}
+      - name: Switching from HTTPS to SSH
+        run: git remote set-url origin ${{ secrets.ssh }}
 
-    - name: Check for changes
-      run: git status
+      - name: Check for changes
+        run: git status
 
-    - name: Stage changed files
-      run: git add .
+      - name: Stage changed files
+        run: git add .
 
-    - name: Commit changed files
-      run: git commit -m "Auto updating version to ${{ steps.get-version.outputs.version }}"
+      - name: Commit changed files
+        run: git commit -m "Auto updating version to ${{ steps.get-version.outputs.version }}"
 
-    - name: Fetch from master
-      run: git fetch origin master
+      - name: Fetch from master
+        run: git fetch origin master
 
-    - name: Push code to master
-      run: git push origin HEAD:master
+      - name: Push code to master
+        run: git push origin HEAD:master
 
 
 

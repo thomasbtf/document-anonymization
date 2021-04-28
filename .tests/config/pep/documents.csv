@@ -1,0 +1,4 @@
+sample_name,fhir_metadata,compressed_docs
+1,data/1111111111.otto_normalverbraucher_jpgs.patient.json,data/1111111111.otto_normalverbraucher_jpgs.tar.lz4
+2,data/2222222222.maxime_mustermann_jpgs.patient.json,data/2222222222.maxime_mustermann_jpgs.tar.lz4
+3,data/v00076462.maxime_mustermann_tiff.patient.json,data/v00076462.maxime_mustermann_tiff.tar.lz4

@@ -1,0 +1,11 @@
+# This file should contain everything to configure the workflow on a global scale.
+# In case of sample based data, it should be complemented by a samples.tsv file that contains
+# one row per sample. It can be parsed easily via pandas.
+pepfile: config/pep/config.yaml
+
+# minimal confidence of the LSTM network of the detected word
+min-confidence: 0.6
+
+# maximal number number of single-character edits that are required to transform 
+# one string (the word on the image) into another (the word in the personal data)
+max-distance: 2

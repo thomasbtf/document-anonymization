@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-            token: ${{ secrets.ADMIN_TOKEN }}
+            token: ${{ secrets.ACTION_PAK }}
 
       - name: Install tree
         run: sudo apt-get install tree

@@ -16,12 +16,6 @@ jobs:
         with:
             token: ${{ secrets.ACTION_PAK }}
 
-      - name: Install tree
-        run: sudo apt-get install tree
-
-      - name: Print tree
-        run: tree -C
-
       - name: Set up Python
         uses: actions/setup-python@v2
 

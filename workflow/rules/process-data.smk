@@ -32,6 +32,8 @@ rule redact_page:
         data_to_redact="results/{id}/data-to-redact/{img}.tsv",
     output:
         "results/{id}/processed-docs/{img}",
+    params:
+        version=get_version(),
     log:
         "logs/{id}/redact-page/{img}.log",
     conda:

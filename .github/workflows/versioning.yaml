@@ -41,6 +41,13 @@ jobs:
       - name: Print new version
         run: cat resources/version.txt
 
+      - name: Update resources
+        uses: test-room-7/action-update-file@v1
+        with:
+            file-path: resources/version
+            commit-msg: Update version to ${{ steps.get-version.outputs.version }}
+            github-token: ${{ secrets.GITHUB_TOKEN }}
+
 
 
 

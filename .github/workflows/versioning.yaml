@@ -1,0 +1,81 @@
+name: Versioning
+
+on:
+  push:
+    branches: 
+      - master
+    paths-ignore:
+      - 'resources/version.txt'
+  pull_request:
+    branches:
+      - "*"
+
+jobs:
+  Bump-Patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+            token: ${{ secrets.ACTION_PAK }}
+
+      - name: Install tree
+        run: sudo apt-get install tree
+
+      - name: Print tree
+        run: tree -C
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+
+      - name: Install dependencies
+        run: pip install bump2version
+
+      - name: Get current version
+        id: get-version
+        run: |
+          echo "::set-output name=version::$(cat resources/version.txt)"
+        shell: bash
+      
+      - name: Print old version
+        run: echo "test ${{ steps.get-version.outputs.version }}"
+
+      - name: Bump patch
+        run: bump2version --current-version ${{ steps.get-version.outputs.version }} patch resources/version.txt
+      
+      - name: Print new version
+        run: cat resources/version.txt
+
+      # - name: Update resources
+      #   uses: test-room-7/action-update-file@v1
+      #   with:
+      #       file-path: resources/version.txt
+      #       commit-msg: Update version to ${{ steps.get-version.outputs.version }}
+      #       github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      # - name: Switching from HTTPS to SSH
+      #   run: git remote set-url origin ${{ secrets.ssh }}
+
+      - name: Set up identity
+        run: |
+          git config --global user.email "thomas.battenfeld@gmail.com"
+          git config --global user.name "Version Bot"
+
+      - name: Stage changed files
+        run: git add .
+
+      - name: Commit changed files
+        run: git commit -m "Auto updating version to ${{ steps.get-version.outputs.version }}"
+
+      - name: Fetch from master
+        run: git fetch origin master
+
+      - name: Push code to master
+        run: git push -f origin HEAD:master
+
+
+
+
+
+
+
+

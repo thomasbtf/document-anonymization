@@ -37,13 +37,19 @@ jobs:
         shell: bash
       
       - name: Print old version
-        run: echo "test ${{ steps.get-version.outputs.version }}"
+        run: echo "${{ steps.get-version.outputs.version }}"
 
       - name: Bump patch
         run: bump2version --current-version ${{ steps.get-version.outputs.version }} patch resources/version.txt
       
+      - name: Get new version
+        id: get-nversion
+        run: |
+          echo "::set-output name=nversion::$(cat resources/version.txt)"
+        shell: bash
+
       - name: Print new version
-        run: cat resources/version.txt
+        run: echo "${{ steps.get-version.outputs.version }}"
 
       # - name: Update resources
       #   uses: test-room-7/action-update-file@v1
@@ -64,7 +70,7 @@ jobs:
         run: git add .
 
       - name: Commit changed files
-        run: git commit -m "Auto updating version to ${{ steps.get-version.outputs.version }}"
+        run: git commit -m "Auto updating version to ${{ steps.get-nversion.outputs.nversion }}"
 
       - name: Fetch from master
         run: git fetch origin master

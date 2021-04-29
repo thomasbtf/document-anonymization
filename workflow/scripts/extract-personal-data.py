@@ -48,14 +48,12 @@ def variate_personal_data(personal_data: dict, first_name_count: int) -> default
         names_all.add(personal_data["name_first_{}".format(i)])
     names_all.add(personal_data["name_family"])
 
-    simple_name_perms = list(itertools.permutations(list(names_simple)))
+    name_perms = list(itertools.permutations(list(names_simple)))
     if names_simple != names_all:
         names_all_perm = list(itertools.permutations(list(names_all)))
-        all_name_perms = simple_name_perms.extend(names_all_perm)
-    else:
-        all_name_perms = simple_name_perms
+        name_perms.extend(names_all_perm)
     
-    for i, perm in enumerate(all_name_perms):
+    for i, perm in enumerate(name_perms):
         personal_data[f"name_perm_{i}"] = ",".join(perm)
     
     # variate phone number

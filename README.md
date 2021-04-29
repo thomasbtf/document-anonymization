@@ -1,4 +1,4 @@
-# Snakemake Workflow: Document Anonymization
+# DocNo - Document Pseudonymization
 
 [![Snakemake](https://img.shields.io/badge/snakemake-≥6.1.1-brightgreen.svg)](https://snakemake.bitbucket.io)
 [![Build Status](https://travis-ci.org/snakemake-workflows/document-anonymization.svg?branch=master)](https://travis-ci.org/snakemake-workflows/document-anonymization)

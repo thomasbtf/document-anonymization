@@ -1,3 +1,2 @@
 sample_name,fhir_metadata,compressed_docs
-1,/local/data/dev/thomas/document-anonymization/data/1021076867.22620149.patient.json,/local/data/dev/thomas/document-anonymization/data/1021076867.20210420.docs.tar.lz4
-2,/local/data/dev/thomas/document-anonymization/data/1021088060.23247710.patient.json,/local/data/dev/thomas/document-anonymization/data/1021088060.20210420.docs.tar.lz4
+1,data/fhire_meta_data.json,data/path_to.lz4

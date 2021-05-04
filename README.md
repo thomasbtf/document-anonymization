@@ -9,6 +9,8 @@ This workflow redacted personal information on given images. The personal inform
 
 * Thomas Battenfeld (@thomasbtf)
 * Simon Magin (@simakro)
+* Christin Seifert
+* Folker Meyer (@folker)
 
 ## Usage
 

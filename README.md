@@ -1,5 +1,3 @@
-![DocNo](docs/dr_no.png)
-
 # DocNo - Document Pseudonymization
 
 [![Snakemake](https://img.shields.io/badge/snakemake-≥6.1.1-brightgreen.svg)](https://snakemake.bitbucket.io)

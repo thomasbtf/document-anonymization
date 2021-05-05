@@ -3,6 +3,8 @@
 !.github/**
 !config
 !config/**
+!docs
+!docs/**
 !resources
 !resources/*
 !workflow

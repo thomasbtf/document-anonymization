@@ -1,3 +1,5 @@
+![DocNo](docs/dr_no.png)
+
 # DocNo - Document Pseudonymization
 
 [![Snakemake](https://img.shields.io/badge/snakemake-≥6.1.1-brightgreen.svg)](https://snakemake.bitbucket.io)
@@ -9,6 +11,8 @@ This workflow redacted personal information on given images. The personal inform
 
 * Thomas Battenfeld (@thomasbtf)
 * Simon Magin (@simakro)
+* Christin Seifert
+* Folker Meyer (@folker)
 
 ## Usage
 

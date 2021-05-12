@@ -1,2 +1,2 @@
 sample_name,fhir_metadata,compressed_docs
-1,data/fhire_meta_data.json,data/path_to.lz4
+1,/Users/simon/Documents/Anonymization_tool/projektW/1021076867.22620149.patient.json,/Users/simon/Documents/Anonymization_tool/projektW/1021076867.20210420.docs.tar.lz4

@@ -111,7 +111,7 @@ def get_questionable_imgs(wildcards, case):
 
 
 def get_resource(name):
-    return str((Path(workflow.snakefile).parent.parent / "resources") / name)
+    return str((Path(workflow.snakefile).parent.parent.parent / "resources") / name)
 
 
 def get_version():

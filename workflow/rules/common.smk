@@ -1,5 +1,6 @@
 from snakemake.utils import validate
 import pandas as pd
+from os import walk
 
 
 # this container defines the underlying OS for each job when using the workflow
@@ -117,3 +118,26 @@ def get_resource(name):
 def get_version():
     with open("resources/version.txt", "r") as v:
         return v.readline().replace("\n", "")
+
+
+def get_uncompressed_docs_dir(wildcards):
+    docs = get_compressed_docs(wildcards).values[0]
+    if docs.endswith(".docs"):
+        return ("results/{id}/uncompressed-zip-docs",)
+    elif docs.endswith(".tar.lz4"):
+        return ("results/{id}/uncompressed-lz4-docs",)
+
+
+def get_zip_files_in_dir(wildcards):
+    docs = get_compressed_docs(wildcards).values[0]
+    filenames = os.listdir(docs)
+    return [
+        filename.removesuffix(".zip")
+        for filename in filenames
+        if filename.endswith(".zip")
+    ]
+
+
+def get_path_of_filename(wildcards):
+    docs = get_compressed_docs(wildcards).values[0]
+    return os.path.join(docs, wildcards.filename + ".zip")

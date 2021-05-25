@@ -1,17 +1,46 @@
-rule extract_docs:
+rule extract_lz4_docs:
     input:
         get_compressed_docs,
     output:
-        directory("results/{id}/uncompressed-docs"),
+        directory("results/{id}/uncompressed-lz4-docs"),
     log:
-        "logs/{id}/extract_docs.log",
+        "logs/{id}/extract_lz4_docs.log",
     shell:
         "(mkdir -p {output} && lz4 -dc --no-sparse {input} | tar -xf - -C {output}) 2> {log}"
 
 
+rule extract_zipped_doc:
+    input:
+        get_path_of_filename,
+    output:
+        temp(directory("results/{id}/single-uncompressed-zip-docs/{filename}")),
+    log:
+        "logs/{id}/extract_zip/{filename}.log",
+    conda:
+        "../envs/unix.yaml"
+    shell:
+        "(unzip \"{input}\" -d \"{output}\") > \"{log}\" 2>&1"
+
+
+rule extract_all_zipped_docs:
+    input:
+        lambda wildcards: expand(
+            "results/{{id}}/single-uncompressed-zip-docs/{filename}",
+            filename=get_zip_files_in_dir(wildcards),
+        ),
+    output:
+        directory("results/{id}/uncompressed-zip-docs/"),
+    params:
+        in_dir = lambda w, input: os.path.dirname(input[0])
+    log:
+        "logs/{id}/extract_zip/all.log",
+    shell:
+        "(mkdir -p {output} && cp -r  {params.in_dir}/* {output}) 2> {log}"
+
+
 rule scan_decomp_dir:
     input:
-        "results/{id}/uncompressed-docs",
+        get_uncompressed_docs_dir,
     output:
         "results/{id}/file_paths.csv",
     log:

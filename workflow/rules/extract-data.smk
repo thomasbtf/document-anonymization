@@ -19,7 +19,7 @@ rule extract_zipped_doc:
     conda:
         "../envs/unix.yaml"
     shell:
-        "(unzip \"{input}\" -d \"{output}\") > \"{log}\" 2>&1"
+        '(unzip "{input}" -d "{output}") > "{log}" 2>&1'
 
 
 rule extract_all_zipped_docs:
@@ -31,7 +31,7 @@ rule extract_all_zipped_docs:
     output:
         directory("results/{id}/uncompressed-zip-docs/"),
     params:
-        in_dir = lambda w, input: os.path.dirname(input[0])
+        in_dir=lambda w, input: os.path.dirname(input[0]),
     log:
         "logs/{id}/extract_zip/all.log",
     shell:

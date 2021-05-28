@@ -45,7 +45,7 @@ def get_image_paths_for_id(wildcards):
         for path in paths
         if ".snakemake" not in path and ".DS_Store" not in path
     ]
-    paths=[
+    paths = [
         path.removeprefix("results/{id}/uncompressed-zip-docs/".format(id=wildcards.id))
         for path in paths
     ]
@@ -149,7 +149,4 @@ def get_path_of_filename(wildcards):
 
 def get_uncompressed_image(wildcards):
     dir = get_uncompressed_docs_dir(wildcards)[0]
-    print(dir)
-    print(os.path.join(dir, wildcards.img))
     return os.path.join(dir, wildcards.img)
-

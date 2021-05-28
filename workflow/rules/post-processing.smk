@@ -3,7 +3,7 @@ rule summarize_found_personal_data:
         data=get_personal_data,
         pages=get_processed_pages,
     output:
-        "results/{id}/personal-data-summary.tsv",
+        temp("results/{id}/tmp/personal-data-summary.tsv"),
     log:
         "logs/{id}/summarize_found_personal_data.log",
     script:
@@ -12,7 +12,7 @@ rule summarize_found_personal_data:
 
 checkpoint create_paths_for_manually_checking:
     input:
-        "results/{id}/personal-data-summary.tsv",
+        "results/{id}/tmp/personal-data-summary.tsv",
     output:
         no_redaction="results/{id}/no-redaction.tsv",
         high_degree_of_redaction="results/{id}/high-degree-of-redaction.tsv",
@@ -24,7 +24,7 @@ checkpoint create_paths_for_manually_checking:
         "../scripts/create-paths-for-manually-checking.py"
 
 
-rule cp_no_redaction:
+rule mv_no_redaction:
     input:
         "results/{id}/processed-docs/{img}",
     output:
@@ -37,10 +37,10 @@ rule cp_no_redaction:
     log:
         "logs/{id}/cp_no_redaction/{img}.log",
     shell:
-        "(cp '{input}' '{output}') 2> '{log}'"
+        "(mv '{input}' '{output}') 2> '{log}'"
 
 
-rule cp_high_degree_of_redaction:
+rule mv_high_degree_of_redaction:
     input:
         "results/{id}/processed-docs/{img}",
     output:
@@ -53,10 +53,10 @@ rule cp_high_degree_of_redaction:
     log:
         "logs/{id}/cp_high_degree_of_redaction/{img}.log",
     shell:
-        "(cp '{input}' '{output}') 2> '{log}'"
+        "(mv '{input}' '{output}') 2> '{log}'"
 
 
-rule cp_partly_found_address:
+rule mv_partly_found_address:
     input:
         "results/{id}/processed-docs/{img}",
     output:
@@ -69,10 +69,10 @@ rule cp_partly_found_address:
     log:
         "logs/{id}/cp_partly_found_address/{img}.log",
     shell:
-        "(cp '{input}' '{output}') 2> '{log}'"
+        "(mv '{input}' '{output}') 2> '{log}'"
 
 
-rule cp_partly_found_name:
+rule mv_partly_found_name:
     input:
         "results/{id}/processed-docs/{img}",
     output:
@@ -84,7 +84,7 @@ rule cp_partly_found_name:
     log:
         "logs/{id}/cp_partly_found_name/{img}.log",
     shell:
-        "(cp '{input}' '{output}') 2> '{log}'"
+        "(mv '{input}' '{output}') 2> '{log}'"
 
 
 rule move_questionable_imgs:
@@ -96,7 +96,7 @@ rule move_questionable_imgs:
         lambda wildcards: get_questionable_imgs(wildcards, case="partly_found_address"),
         lambda wildcards: get_questionable_imgs(wildcards, case="partly_found_name"),
     output:
-        touch("results/{id}/moved"),
+        temp(touch("results/{id}/tmp/moved")),
     log:
         "logs/{id}/move_questionable_imgs.log",
 
@@ -104,9 +104,9 @@ rule move_questionable_imgs:
 rule summarize_manuel_checks:
     input:
         manuel_checks=rules.create_paths_for_manually_checking.output,
-        total_imgs_processed="results/{id}/personal-data-summary.tsv",
+        total_imgs_processed="results/{id}/tmp/personal-data-summary.tsv",
     output:
-        "results/{id}/manuel_check_summary.tsv",
+        "results/{id}/tabels/manuel_check_summary.tsv",
     log:
         "logs/{id}/summarize_manuel_checks.log",
     script:
@@ -115,7 +115,7 @@ rule summarize_manuel_checks:
 
 rule plot_manuel_check_summary:
     input:
-        "results/{id}/manuel_check_summary.tsv",
+        "results/{id}/tabels/manuel_check_summary.tsv",
     output:
         report(
             "results/{id}/plots/summary-for-{id}.svg",

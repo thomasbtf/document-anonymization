@@ -49,7 +49,7 @@ def get_image_paths_for_id(wildcards):
     # TODO
     # This is ugly. We should rewrite the file handling.
     paths = [
-        path.removeprefix("results/{id}/uncompressed-zip-docs/".format(id=wildcards.id))
+        path.removeprefix("results/{id}/tmp/uncompressed-zip-docs/".format(id=wildcards.id))
         for path in paths
     ]
     return paths
@@ -63,7 +63,7 @@ def get_processed_pages(wildcards):
 
 def get_personal_data(wildcards):
     paths = get_image_paths_for_id(wildcards)
-    pattern = "results/{{id}}/data-to-redact/{img}.tsv"
+    pattern = "results/{{id}}/tmp/data-to-redact/{img}.tsv"
     return expand(pattern, img=paths)
 
 
@@ -129,9 +129,9 @@ def get_version():
 def get_uncompressed_docs_dir(wildcards):
     docs = get_compressed_docs(wildcards).values[0]
     if docs.endswith(".docs"):
-        return ("results/{id}/uncompressed-zip-docs",)
+        return ("results/{id}/tmp/uncompressed-zip-docs",)
     elif docs.endswith(".tar.lz4"):
-        return ("results/{id}/uncompressed-lz4-docs",)
+        return ("results/{id}/tmp/uncompressed-lz4-docs",)
 
 
 def get_zip_files_in_dir(wildcards):

@@ -37,4 +37,4 @@ def add_ext(paths_file: str, fixed_paths: str):
 
 if __name__ == "__main__":
     sys.stderr = open(snakemake.log[0], "w")
-    add_ext(snakemake.input[0], snakemake.output[0])
+    add_ext(snakemake.input.files, snakemake.output[0])

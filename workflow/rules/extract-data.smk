@@ -59,6 +59,7 @@ rule scan_decomp_dir:
     script:
         "../scripts/scan_decomp_data.py"
 
+
 # TODO combine this rule with the rule scan_decomp_dir
 checkpoint fix_file_ext:
     input:

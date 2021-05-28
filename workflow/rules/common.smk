@@ -45,11 +45,13 @@ def get_image_paths_for_id(wildcards):
         for path in paths
         if ".snakemake" not in path and ".DS_Store" not in path
     ]
+
+    # TODO
+    # This is ugly. We should rewrite the file handling.
     paths = [
         path.removeprefix("results/{id}/uncompressed-zip-docs/".format(id=wildcards.id))
         for path in paths
     ]
-    print(paths)
     return paths
 
 

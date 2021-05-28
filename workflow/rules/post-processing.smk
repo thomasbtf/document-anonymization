@@ -14,10 +14,10 @@ checkpoint create_paths_for_manually_checking:
     input:
         "results/{id}/tmp/personal-data-summary.tsv",
     output:
-        no_redaction="results/{id}/no-redaction.tsv",
-        high_degree_of_redaction="results/{id}/high-degree-of-redaction.tsv",
-        partly_found_address="results/{id}/partly-found-address.tsv",
-        partly_found_name="results/{id}/partly-found-name.tsv",
+        no_redaction="results/{id}/tabels/no-redaction.tsv",
+        high_degree_of_redaction="results/{id}/tabels/high-degree-of-redaction.tsv",
+        partly_found_address="results/{id}/tabels/partly-found-address.tsv",
+        partly_found_name="results/{id}/tabels/partly-found-name.tsv",
     log:
         "logs/{id}/create_paths_for_manually_checking.log",
     script:
@@ -106,7 +106,7 @@ rule summarize_manuel_checks:
         manuel_checks=rules.create_paths_for_manually_checking.output,
         total_imgs_processed="results/{id}/tmp/personal-data-summary.tsv",
     output:
-        "results/{id}/tabels/manuel_check_summary.tsv",
+        "results/{id}/tabels/manuel-check-summary.tsv",
     log:
         "logs/{id}/summarize_manuel_checks.log",
     script:
@@ -115,7 +115,7 @@ rule summarize_manuel_checks:
 
 rule plot_manuel_check_summary:
     input:
-        "results/{id}/tabels/manuel_check_summary.tsv",
+        "results/{id}/tabels/manuel-check-summary.tsv",
     output:
         report(
             "results/{id}/plots/summary-for-{id}.svg",

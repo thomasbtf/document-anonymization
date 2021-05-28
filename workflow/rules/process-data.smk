@@ -1,6 +1,6 @@
 rule preprocess_page:
     input:
-        "results/{id}/uncompressed-docs/{img}",
+        get_uncompressed_image,
     output:
         "results/{id}/preprocessed-docs/{img}",
     log:
@@ -28,7 +28,7 @@ rule identify_personal_data:
 
 rule redact_page:
     input:
-        orginal_page="results/{id}/uncompressed-docs/{img}",
+        orginal_page=get_uncompressed_image,
         data_to_redact="results/{id}/data-to-redact/{img}.tsv",
     output:
         "results/{id}/processed-docs/{img}",

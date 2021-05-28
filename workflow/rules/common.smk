@@ -41,11 +41,15 @@ def get_image_paths_for_id(wildcards):
         paths = pd.read_csv(f, sep="\n", header=None, squeeze=True)
 
     paths = [
-        path.replace("results/{id}/uncompressed-docs/".format(id=wildcards.id), "")
+        path.removeprefix("results/{id}/uncompressed-docs/".format(id=wildcards.id))
         for path in paths
         if ".snakemake" not in path and ".DS_Store" not in path
     ]
-
+    paths=[
+        path.removeprefix("results/{id}/uncompressed-zip-docs/".format(id=wildcards.id))
+        for path in paths
+    ]
+    print(paths)
     return paths
 
 
@@ -141,3 +145,11 @@ def get_zip_files_in_dir(wildcards):
 def get_path_of_filename(wildcards):
     docs = get_compressed_docs(wildcards).values[0]
     return os.path.join(docs, wildcards.filename + ".zip")
+
+
+def get_uncompressed_image(wildcards):
+    dir = get_uncompressed_docs_dir(wildcards)[0]
+    print(dir)
+    print(os.path.join(dir, wildcards.img))
+    return os.path.join(dir, wildcards.img)
+

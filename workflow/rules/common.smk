@@ -41,7 +41,7 @@ def get_image_paths_for_id(wildcards):
         paths = pd.read_csv(f, sep="\n", header=None, squeeze=True)
 
     paths = [
-        path.removeprefix("results/{id}/uncompressed-docs/".format(id=wildcards.id))
+        path.removeprefix("results/{id}/uncompressed-lz4-docs/".format(id=wildcards.id))
         for path in paths
         if ".snakemake" not in path and ".DS_Store" not in path
     ]

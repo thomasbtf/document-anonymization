@@ -103,12 +103,12 @@ rule copy_questionable_imgs:
 
 rule remove_questionable_imgs:
     input:
-        paths = lambda wildcards: get_questionable_imgs(wildcards, case="all"),
+        paths=lambda wildcards: get_questionable_imgs(wildcards, case="all"),
         moved="results/{id}/tmp/moved",
     output:
         temp(touch("results/{id}/tmp/deleted")),
     log:
-        "logs/{id}/remove_questionable_imgs"
+        "logs/{id}/remove_questionable_imgs",
     shell:
         "(rm {input.paths}) 2> {log}"
 

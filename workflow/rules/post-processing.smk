@@ -24,7 +24,7 @@ checkpoint create_paths_for_manually_checking:
         "../scripts/create-paths-for-manually-checking.py"
 
 
-rule mv_no_redaction:
+rule cp_no_redaction:
     input:
         "results/{id}/processed-docs/{img}",
     output:
@@ -37,10 +37,10 @@ rule mv_no_redaction:
     log:
         "logs/{id}/cp_no_redaction/{img}.log",
     shell:
-        "(mv '{input}' '{output}') 2> '{log}'"
+        "(cp '{input}' '{output}') 2> '{log}'"
 
 
-rule mv_high_degree_of_redaction:
+rule cp_high_degree_of_redaction:
     input:
         "results/{id}/processed-docs/{img}",
     output:
@@ -53,10 +53,10 @@ rule mv_high_degree_of_redaction:
     log:
         "logs/{id}/cp_high_degree_of_redaction/{img}.log",
     shell:
-        "(mv '{input}' '{output}') 2> '{log}'"
+        "(cp '{input}' '{output}') 2> '{log}'"
 
 
-rule mv_partly_found_address:
+rule cp_partly_found_address:
     input:
         "results/{id}/processed-docs/{img}",
     output:
@@ -69,10 +69,10 @@ rule mv_partly_found_address:
     log:
         "logs/{id}/cp_partly_found_address/{img}.log",
     shell:
-        "(mv '{input}' '{output}') 2> '{log}'"
+        "(cp '{input}' '{output}') 2> '{log}'"
 
 
-rule mv_partly_found_name:
+rule cp_partly_found_name:
     input:
         "results/{id}/processed-docs/{img}",
     output:
@@ -84,10 +84,10 @@ rule mv_partly_found_name:
     log:
         "logs/{id}/cp_partly_found_name/{img}.log",
     shell:
-        "(mv '{input}' '{output}') 2> '{log}'"
+        "(cp '{input}' '{output}') 2> '{log}'"
 
 
-rule move_questionable_imgs:
+rule copy_questionable_imgs:
     input:
         lambda wildcards: get_questionable_imgs(wildcards, case="no_redaction"),
         lambda wildcards: get_questionable_imgs(

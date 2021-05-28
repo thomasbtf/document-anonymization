@@ -112,6 +112,32 @@ def get_questionable_imgs(wildcards, case):
             id=wildcards.id
         ).output.partly_found_name.open() as f:
             paths = load_tsv(f)
+    elif case == "all":
+        with checkpoints.create_paths_for_manually_checking.get(
+                id=wildcards.id
+            ).output.no_redaction.open() as f:
+                no_redaction = load_tsv(f)
+        with checkpoints.create_paths_for_manually_checking.get(
+                id=wildcards.id
+            ).output.high_degree_of_redaction.open() as f:
+                high_degree_of_redaction = load_tsv(f)
+        with checkpoints.create_paths_for_manually_checking.get(
+                id=wildcards.id
+            ).output.partly_found_address.open() as f:
+                partly_found_address = load_tsv(f)
+        with checkpoints.create_paths_for_manually_checking.get(
+                id=wildcards.id
+            ).output.partly_found_name.open() as f:
+                partly_found_name = load_tsv(f)
+        
+        all_paths = no_redaction.append(high_degree_of_redaction, ignore_index=True).append(partly_found_address, ignore_index=True).append(partly_found_name, ignore_index=True)
+        all_paths = all_paths.unique()
+        print("---------")
+        print(all_paths)
+        print("---------")
+        print("FUUUUUUUCK")
+        return all_paths
+
 
     paths = [
         path.replace("results/{id}/processed-docs/".format(id=wildcards.id), "")

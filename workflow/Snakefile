@@ -26,5 +26,5 @@ include: "rules/post-processing.smk"
 rule all:
     input:
         expand("results/{id}/tmp/personal-data-summary.tsv", id=get_all_ids()),
-        expand("results/{id}/tmp/moved", id=get_all_ids()),
+        expand("results/{id}/tmp/deleted", id=get_all_ids()),
         expand("results/{id}/plots/summary-for-{id}.svg", id=get_all_ids()),

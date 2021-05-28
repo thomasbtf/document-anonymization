@@ -101,6 +101,18 @@ rule copy_questionable_imgs:
         "logs/{id}/move_questionable_imgs.log",
 
 
+rule remove_questionable_imgs:
+    input:
+        paths = lambda wildcards: get_questionable_imgs(wildcards, case="all"),
+        moved="results/{id}/tmp/moved",
+    output:
+        temp(touch("results/{id}/tmp/deleted")),
+    log:
+        "logs/{id}/remove_questionable_imgs"
+    shell:
+        "(rm {input.paths}) 2> {log}"
+
+
 rule summarize_manuel_checks:
     input:
         manuel_checks=rules.create_paths_for_manually_checking.output,

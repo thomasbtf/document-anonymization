@@ -106,7 +106,6 @@ def variate_personal_data(personal_data: dict, first_name_count: int) -> default
         personal_data[f"birthDate_perm{i}"] = f"*{dy}{sep}{m}{sep}{yr}"
         personal_data[f"birthDate_perm{i}{i}"] = f"{yr}{sep}{m}{sep}{dy}"
     
-    print(personal_data)
     #variate country
 
     return personal_data

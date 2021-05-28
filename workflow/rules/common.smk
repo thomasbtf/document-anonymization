@@ -40,14 +40,14 @@ def get_image_paths_for_id(wildcards):
     with checkpoints.fix_file_ext.get(id=wildcards.id).output[0].open() as f:
         paths = pd.read_csv(f, sep="\n", header=None, squeeze=True)
 
+    # TODO
+    # This is ugly. We should rewrite the file handling.
     paths = [
-        path.removeprefix("results/{id}/uncompressed-lz4-docs/".format(id=wildcards.id))
+        path.removeprefix("results/{id}/tmp/uncompressed-lz4-docs/".format(id=wildcards.id))
         for path in paths
         if ".snakemake" not in path and ".DS_Store" not in path
     ]
 
-    # TODO
-    # This is ugly. We should rewrite the file handling.
     paths = [
         path.removeprefix(
             "results/{id}/tmp/uncompressed-zip-docs/".format(id=wildcards.id)

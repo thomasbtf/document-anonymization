@@ -97,6 +97,7 @@ rule copy_questionable_imgs:
         lambda wildcards: get_questionable_imgs(wildcards, case="partly_found_name"),
     output:
         temp(touch("results/{id}/tmp/moved")),
+        touch("results/{id}/tmp/filler")
     log:
         "logs/{id}/move_questionable_imgs.log",
 

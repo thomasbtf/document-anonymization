@@ -1,8 +1,8 @@
 rule preprocess_page:
     input:
-        "results/{id}/uncompressed-docs/{img}",
+        get_uncompressed_image,
     output:
-        "results/{id}/preprocessed-docs/{img}",
+        temp("results/{id}/tmp/preprocessed-docs/{img}"),
     log:
         "logs/{id}/preprocess-page/{img}.log",
     conda:
@@ -13,11 +13,11 @@ rule preprocess_page:
 
 rule identify_personal_data:
     input:
-        preprocessed_page="results/{id}/preprocessed-docs/{img}",
-        personal_data="results/{id}/personal-data.json",
+        preprocessed_page="results/{id}/tmp/preprocessed-docs/{img}",
+        personal_data="results/{id}/tmp/personal-data.json",
     output:
-        text_to_redact="results/{id}/data-to-redact/{img}.tsv",
-        all_text="results/{id}/detected-text/{img}.tsv",
+        text_to_redact=temp("results/{id}/tmp/data-to-redact/{img}.tsv"),
+        all_text=temp("results/{id}/tmp/detected-text/{img}.tsv"),
     log:
         "logs/{id}/identify-personal-data/{img}.log",
     conda:
@@ -28,8 +28,8 @@ rule identify_personal_data:
 
 rule redact_page:
     input:
-        orginal_page="results/{id}/uncompressed-docs/{img}",
-        data_to_redact="results/{id}/data-to-redact/{img}.tsv",
+        orginal_page=get_uncompressed_image,
+        data_to_redact="results/{id}/tmp/data-to-redact/{img}.tsv",
     output:
         "results/{id}/processed-docs/{img}",
     params:

@@ -20,6 +20,14 @@ def parse_meta_data(json_path: str) -> defaultdict:
     with open(json_path) as json_file:
         data = json.load(json_file)
 
+    # select the patient reosurce from the bundel data export
+    for ele in data.get("entry", {}):
+        # iterate of entries
+        for key, value in ele.get("resource", {}).items():
+            if key == "resourceType" and value == "Patient":
+                data = ele.get("resource")
+                break
+
     # TODO design this part more flexible, maybe via the snakemake config file
     # ---------------------------------------
     personal_data = defaultdict()
@@ -32,9 +40,9 @@ def parse_meta_data(json_path: str) -> defaultdict:
     personal_data["address"] = data.get("address")[0].get("line")[0]
     personal_data["city"] = " ".join([data.get("address")[0].get("postalCode"), data.get("address")[0].get("city")])
     personal_data["case_number"] = json_path.split("/")[-1].split(".")[0]
-    for com in data["telecom"]:
-        com_type = com["system"]
-        personal_data[com_type] = com["value"]
+    for com in data.get("telecom", {}):
+        com_type = com.get("system", {})
+        personal_data[com_type] = com.get("value", {})
     # personal_data["gender"] = data.get("gender")
     # personal_data["country"] = data.get("address")[0].get("country")
     # ---------------------------------------
@@ -73,7 +81,7 @@ def variate_personal_data(personal_data: dict, first_name_count: int) -> default
                 provider_local_codes.append("0" + line.split(";")[0])
     
     nums = ["1","2","3","4","5","6","7","8","9","0"]
-    tmp_phone = personal_data["phone"]
+    tmp_phone = personal_data.get("phone", "")
     for letter in tmp_phone:
         if letter not in nums:
             tmp_phone = personal_data["phone"].replace(letter, "")
@@ -98,7 +106,6 @@ def variate_personal_data(personal_data: dict, first_name_count: int) -> default
         personal_data[f"birthDate_perm{i}"] = f"*{dy}{sep}{m}{sep}{yr}"
         personal_data[f"birthDate_perm{i}{i}"] = f"{yr}{sep}{m}{sep}{dy}"
     
-    print(personal_data)
     #variate country
 
     return personal_data

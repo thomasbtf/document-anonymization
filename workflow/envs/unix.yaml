@@ -1,0 +1,5 @@
+channels:
+  - conda-forge
+  - anaconda
+dependencies:  
+  - unzip = 6.0

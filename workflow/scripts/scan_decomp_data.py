@@ -8,7 +8,9 @@ def scan_folder(subfolder_path: str, writeable_file_object: typing.TextIO):
     for entry in os.scandir(subfolder_path):
         if entry.is_dir(follow_symlinks=False):
             scan_folder(entry.path, writeable_file_object)
-        elif entry.is_file() and not any(ignore_element in entry.path for ignore_element in ignore):
+        elif entry.is_file() and not any(
+            ignore_element in entry.path for ignore_element in ignore
+        ):
             writeable_file_object.write(f"{entry.path}\n")
         else:
             pass

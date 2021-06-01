@@ -1,2 +1,4 @@
 sample_name,fhir_metadata,compressed_docs
-1,data/fhire_meta_data.json,data/path_to.lz4
+1,data/batch2/23173273.2021-05-18/23173273.2021-05-18.bundle.json,data/2021-03-10.81304303.docs
+2,data/batch2-reduced/23173273.2021-05-18/23173273.2021-05-18.bundle.json,data/batch2-reduced/23173273.2021-05-18/23173273.2021-05-18.docs
+3,data/1021088060.23247710.patient.json,data/1021088060.20210420.docs.tar.lz4

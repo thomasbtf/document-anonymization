@@ -4,10 +4,10 @@ import imghdr
 
 
 def add_ext(paths_file: str, fixed_paths: str):
-    with open(paths_file, 'r') as path_list:
-        with open(fixed_paths, 'w') as new_paths:
+    with open(paths_file, "r") as path_list:
+        with open(fixed_paths, "w") as new_paths:
             cwd = os.getcwd()
-            accepted_ext = ["jpg", "jpeg", "tiff", "tif", "bmp"] # may add "pdf" etc.
+            accepted_ext = ["jpg", "jpeg", "tiff", "tif", "bmp"]  # may add "pdf" etc.
             ext_pairs = [{"jpg", "jpeg"}, {"tiff", "tif"}]
             for path in path_list:
                 path = path.strip()
@@ -30,7 +30,7 @@ def add_ext(paths_file: str, fixed_paths: str):
                         # In this case the file needs to be channeled into another branch of the workflow.
                     else:
                         print(f"file {path} is in an incompatible file format.")
-                        # file won´t be written to file-list for further processing
+                        #  file won´t be written to file-list for further processing
                 else:
                     new_paths.write(path + "\n")
 

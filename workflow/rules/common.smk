@@ -130,7 +130,7 @@ def get_questionable_imgs(wildcards, case):
         ).output.partly_found_name.open() as f:
             partly_found_name = load_tsv(f)
 
-        all_paths= pd.Series("results/{id}/tmp/filler".format(id=wildcards.id))
+        all_paths = pd.Series("results/{id}/tmp/filler".format(id=wildcards.id))
         all_paths = (
             all_paths.append(no_redaction, ignore_index=True)
             .append(high_degree_of_redaction, ignore_index=True)

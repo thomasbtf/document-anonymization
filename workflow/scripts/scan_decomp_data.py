@@ -4,7 +4,7 @@ import typing
 
 
 def scan_folder(subfolder_path: str, writeable_file_object: typing.TextIO):
- #  may add list of system files to ignore = [".snakemake_timestamp", ".DS_Store"]
+    #  may add list of system files to ignore = [".snakemake_timestamp", ".DS_Store"]
     for entry in os.scandir(subfolder_path):
         if entry.is_dir(follow_symlinks=False):
             scan_folder(entry.path, writeable_file_object)

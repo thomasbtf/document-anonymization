@@ -41,20 +41,21 @@ def parse_page(
 
     personal_text = select_personal_data(all_text, personal_data, max_dist)
 
-    indices_to_remove = [ele.split(",") for ele in personal_text["index"].astype(str).values]
-    indices_to_remove = [int(float(item)) for sublist in indices_to_remove for item in sublist]
-    
+    indices_to_remove = [
+        ele.split(",") for ele in personal_text["index"].astype(str).values
+    ]
+    indices_to_remove = [
+        int(float(item)) for sublist in indices_to_remove for item in sublist
+    ]
+
     non_personal_text = all_text[~all_text["index"].isin(indices_to_remove)]
     with open(out_path_non_personal_data, "w") as out_txt:
-        out_txt.write(
-            " ".join(non_personal_text["text"].values)
-        )
-    
+        out_txt.write(" ".join(non_personal_text["text"].values))
+
     # non_personal_text.to_csv(out_path_non_personal_data, index=False, sep="\t")
 
     personal_text.drop(columns=["index"], inplace=True)
     personal_text.to_csv(out_path_personal_data, index=False, sep="\t")
-    
 
 
 def detect_text(img: typing.Any, min_conf: float) -> pd.DataFrame:
@@ -69,7 +70,9 @@ def detect_text(img: typing.Any, min_conf: float) -> pd.DataFrame:
     """
 
     # ocr
-    detected_text_df = pytesseract.image_to_data(img, lang="deu", output_type=Output.DATAFRAME)
+    detected_text_df = pytesseract.image_to_data(
+        img, lang="deu", output_type=Output.DATAFRAME
+    )
 
     # filter ocr table
     detected_text_df = detected_text_df[detected_text_df.conf >= min_conf]
@@ -102,7 +105,10 @@ def select_personal_data(
     max_spaces = max([value.count(" ") for value in personal_data.values()])
     for no_spaces in range(max_spaces + 1):
         tmp_df = detected_text_df.copy()
-        tmp_df.rename(columns={"text": "text_0", "width": "width_0", "index":"index_0"}, inplace=True)
+        tmp_df.rename(
+            columns={"text": "text_0", "width": "width_0", "index": "index_0"},
+            inplace=True,
+        )
 
         # subset of personal data dict, according to # spaces
         tmp_dict = {
@@ -147,7 +153,10 @@ def select_personal_data(
             tmp_df["width_0"] = tmp_df[highest_width_column_name].astype(int)
             tmp_df.drop(columns=shift_colums, inplace=True)
 
-        tmp_df.rename(columns={"text_0": "text", "width_0": "width", "index_0":"index"}, inplace=True)
+        tmp_df.rename(
+            columns={"text_0": "text", "width_0": "width", "index_0": "index"},
+            inplace=True,
+        )
 
         # calc edit distances for each key in subsampled dict
         for key, value in tmp_dict.items():

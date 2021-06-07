@@ -38,7 +38,9 @@ def parse_meta_data(json_path: str) -> defaultdict:
     personal_data["name_family"] = data.get("name")[0].get("family")
     personal_data["birthDate"] = data.get("birthDate")
     personal_data["address"] = data.get("address")[0].get("line")[0]
-    personal_data["city"] = " ".join([data.get("address")[0].get("postalCode"), data.get("address")[0].get("city")])
+    personal_data["city"] = " ".join(
+        [data.get("address")[0].get("postalCode"), data.get("address")[0].get("city")]
+    )
     personal_data["case_number"] = json_path.split("/")[-1].split(".")[0]
     for com in data.get("telecom", {}):
         com_type = com.get("system", {})
@@ -47,6 +49,7 @@ def parse_meta_data(json_path: str) -> defaultdict:
     # personal_data["country"] = data.get("address")[0].get("country")
     # ---------------------------------------
     return personal_data, first_name_count
+
 
 def variate_personal_data(personal_data: dict, first_name_count: int) -> defaultdict:
     # permutate names
@@ -60,17 +63,43 @@ def variate_personal_data(personal_data: dict, first_name_count: int) -> default
     if names_simple != names_all:
         names_all_perm = list(itertools.permutations(list(names_all)))
         name_perms.extend(names_all_perm)
-    
+
     for i, perm in enumerate(name_perms):
         personal_data[f"name_perm_{i}"] = ",".join(perm)
-    
+
     # variate phone number
     provider_local_codes = [
-                            "01511", "01512", "01514", "01515", "01516", "01517", "01520", "01522", "01523", 
-                            "01525", "015566", "01570", "01573", "01575", "01577", "01578", "01590", "0160",
-                             "0162", "0163", "0170", "0171", "0172", "0173", "0174", "0175", "0176", "0177",
-                            "0178", "0179", 
-                            ]
+        "01511",
+        "01512",
+        "01514",
+        "01515",
+        "01516",
+        "01517",
+        "01520",
+        "01522",
+        "01523",
+        "01525",
+        "015566",
+        "01570",
+        "01573",
+        "01575",
+        "01577",
+        "01578",
+        "01590",
+        "0160",
+        "0162",
+        "0163",
+        "0170",
+        "0171",
+        "0172",
+        "0173",
+        "0174",
+        "0175",
+        "0176",
+        "0177",
+        "0178",
+        "0179",
+    ]
 
     # it would be much better to generate this list only once centrally instead for every patient sample again
     with open("resources/Vorwahlen_Festnetz_Bundesnetzagentur.csv", "r") as local_codes:
@@ -79,8 +108,8 @@ def variate_personal_data(personal_data: dict, first_name_count: int) -> default
                 pass
             else:
                 provider_local_codes.append("0" + line.split(";")[0])
-    
-    nums = ["1","2","3","4","5","6","7","8","9","0"]
+
+    nums = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
     tmp_phone = personal_data.get("phone", "")
     for letter in tmp_phone:
         if letter not in nums:
@@ -88,25 +117,27 @@ def variate_personal_data(personal_data: dict, first_name_count: int) -> default
     personal_data["phone_perm0"] = tmp_phone
 
     for code in provider_local_codes:
-        if  tmp_phone.startswith(code):
+        if tmp_phone.startswith(code):
             pre_code = code
             break
         else:
             pre_code = tmp_phone[:4]
-    
+
     seperators = ["/", "\\", "-", " ", "_", ".", ":"]
 
     for i, sep in enumerate(seperators):
-       personal_data[f"phone_perm{i+1}"] = tmp_phone[:len(pre_code)+1] + sep + tmp_phone[len(pre_code)+1:]
+        personal_data[f"phone_perm{i+1}"] = (
+            tmp_phone[: len(pre_code) + 1] + sep + tmp_phone[len(pre_code) + 1 :]
+        )
 
-    #variate birthdate
+    # variate birthdate
     yr, m, dy = personal_data["birthDate"].split("-")
     for i, sep in enumerate(seperators):
         personal_data[f"birthDate_perm{i}"] = f"{dy}{sep}{m}{sep}{yr}"
         personal_data[f"birthDate_perm{i}"] = f"*{dy}{sep}{m}{sep}{yr}"
         personal_data[f"birthDate_perm{i}{i}"] = f"{yr}{sep}{m}{sep}{dy}"
-    
-    #variate country
+
+    # variate country
 
     return personal_data
 
@@ -136,7 +167,7 @@ if __name__ == "__main__":
     # if personal_data.get("country"):
     #     personal_data = format_country(personal_data)
 
-    #personal_data = {key: value.lower().strip() for key, value in personal_data.items()}
+    # personal_data = {key: value.lower().strip() for key, value in personal_data.items()}
     var_data = {key: value.lower().strip() for key, value in var_data.items()}
     save_personal_data(var_data, snakemake.output[0])
 

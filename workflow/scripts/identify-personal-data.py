@@ -51,7 +51,9 @@ def detect_text(img: typing.Any, min_conf: float) -> pd.DataFrame:
     """
 
     # ocr
-    detected_text_df = pytesseract.image_to_data(img, lang="deu", output_type=Output.DATAFRAME)
+    detected_text_df = pytesseract.image_to_data(
+        img, lang="deu", output_type=Output.DATAFRAME
+    )
 
     # filter ocr table
     detected_text_df = detected_text_df[detected_text_df.conf >= min_conf]

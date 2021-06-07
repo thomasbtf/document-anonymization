@@ -23,16 +23,18 @@ def partly_found_address(summary_df: pd.DataFrame, out_path: str):
         df = summary_df[summary_df["city"] != summary_df["address"]][["processed img"]]
     else:
         df = pd.DataFrame(columns=["processed img"])
-    
+
     save_df(df, out_path)
 
 
 def partly_found_name(summary_df: pd.DataFrame, out_path: str):
     if "name_family" in summary_df.columns and "name_first_0" in summary_df.columns:
-        df = summary_df[summary_df["name_family"] != summary_df["name_first_0"]][["processed img"]]
+        df = summary_df[summary_df["name_family"] != summary_df["name_first_0"]][
+            ["processed img"]
+        ]
     else:
         df = pd.DataFrame(columns=["processed img"])
-    
+
     save_df(df, out_path)
 
 

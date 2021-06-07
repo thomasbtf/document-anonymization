@@ -69,5 +69,7 @@ checkpoint fix_file_ext:
         temp("results/{id}/tmp/fixed_paths.csv"),
     log:
         "logs/{id}/fix_file_ext.log",
+    conda:
+        "../envs/filetype.yaml"
     script:
         "../scripts/fix_filenames.py"

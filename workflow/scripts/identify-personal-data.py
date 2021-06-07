@@ -1,3 +1,4 @@
+from os import replace
 from re import split
 import typing
 import json
@@ -15,6 +16,7 @@ def parse_page(
     out_path_personal_data: str,
     out_path_non_personal_data: str,
     personal_data_path: dict,
+    replacements_path:str,
     min_conf: float = 0.6,
     max_dist: int = 2,
 ):
@@ -26,6 +28,7 @@ def parse_page(
         out_path_personal_data (str): path where personal data should be written to
         out_path_non_personal_data (str): path where non personal data should be written to
         personal_data (dict): path to personal data that should be made unrecognizable
+        replacements: Path to replacement json
         min_conf (float, optional): minimal OCR confidence score. Defaults to 0.6.
         max_dist (int, optional): maximum Levenshtein distance of the found text on the image to the personal data. Defaults to 2.
     """
@@ -41,21 +44,64 @@ def parse_page(
 
     personal_text = select_personal_data(all_text, personal_data, max_dist)
 
+    replace_and_save_personal_text(personal_text=personal_text, all_text=all_text, out_path_non_personal_data=out_path_non_personal_data, replacements_path=replacements_path, max_dist=max_dist)
+
+    personal_text.drop(columns=["index"], inplace=True)
+    personal_text.to_csv(out_path_personal_data, index=False, sep="\t")
+
+
+def replace_and_save_personal_text(personal_text:pd.DataFrame, all_text:pd.DataFrame, out_path_non_personal_data:str, replacements_path:str, max_dist: int = 2):
+    """Replaces and saves text on page.
+
+    Args:
+        personal_text (pd.DataFrame): DataFrame with all detected text
+        all_text (pd.DataFrame): DataFrame with identifed personal
+        out_path_non_personal_data (str): Path to write replaced text to.
+    """
+    personal_text = personal_text.copy()
+    # remove personal data
     indices_to_remove = [
         ele.split(",") for ele in personal_text["index"].astype(str).values
     ]
     indices_to_remove = [
         int(float(item)) for sublist in indices_to_remove for item in sublist
     ]
-
     non_personal_text = all_text[~all_text["index"].isin(indices_to_remove)]
+
+    # extract reason
+    non_distance_columns=["index", "left", "top", "width", "height", "conf", "text"]
+    distance_columns = list(set(personal_text.columns) - set(non_distance_columns))
+
+
+    personal_text["reason"] = ""
+    for col in distance_columns:
+        personal_text[col] = personal_text[col].mask(personal_text[col] > float(max_dist))
+        personal_text[col] = personal_text[col].mask(personal_text[col] <= float(max_dist), col)
+        personal_text["reason"] = personal_text["reason"] +  personal_text[col].fillna("")
+
+    personal_text = personal_text[["index", "reason"]]
+
+    # insert replacements
+    with open(replacements_path) as json_file:
+        replacements = json.load(json_file)
+
+    replaced_text = personal_text.copy().rename(columns={"reason" : "text"})
+    for key in replacements.keys():
+        replaced_text["text"][personal_text["reason"].str.contains(key)] = replacements[key]
+
+    # if no replacement was found, replace identified personal data with "PrivateDataPrivateData"
+    replaced_text["text"][replaced_text["text"] == personal_text["reason"]] == "PrivateDataPrivateData"
+
+    # append replacements to whol text
+    replaced_text['index'] = replaced_text['index'].astype(str)
+    replaced_text['index'] = [x.split(',') for x in replaced_text['index']]
+    replaced_text = replaced_text.explode("index")
+    replaced_text['index'] = replaced_text['index'].astype(float).astype(int)
+    non_personal_text = non_personal_text.append(replaced_text, ignore_index=True)
+    non_personal_text.sort_values(by=["index"], inplace=True)
+
     with open(out_path_non_personal_data, "w") as out_txt:
         out_txt.write(" ".join(non_personal_text["text"].values))
-
-    # non_personal_text.to_csv(out_path_non_personal_data, index=False, sep="\t")
-
-    personal_text.drop(columns=["index"], inplace=True)
-    personal_text.to_csv(out_path_personal_data, index=False, sep="\t")
 
 
 def detect_text(img: typing.Any, min_conf: float) -> pd.DataFrame:
@@ -188,4 +234,5 @@ if __name__ == "__main__":
         out_path_non_personal_data=snakemake.output.non_personal_data,
         min_conf=snakemake.config["min-confidence"],
         max_dist=snakemake.config["max-distance"],
+        replacements_path=snakemake.params["replacements"]
     )

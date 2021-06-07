@@ -111,7 +111,7 @@ rule remove_questionable_imgs:
     log:
         "logs/{id}/remove_questionable_imgs",
     params:
-        escaped_input = lambda i, input: [f"\"{path}\"" for path in input.paths]
+        escaped_input=lambda i, input: [f'"{path}"' for path in input.paths],
     shell:
         "(rm {params.escaped_input}) 2> {log}"
 

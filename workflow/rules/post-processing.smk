@@ -110,8 +110,10 @@ rule remove_questionable_imgs:
         temp(touch("results/{id}/tmp/deleted")),
     log:
         "logs/{id}/remove_questionable_imgs",
+    params:
+        escaped_input = lambda i, input: [f"\"{path}\"" for path in input.paths]
     shell:
-        "(rm {input.paths}) 2> {log}"
+        "(rm {params.escaped_input}) 2> {log}"
 
 
 rule summarize_manuel_checks:

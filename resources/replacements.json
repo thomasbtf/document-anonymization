@@ -1,0 +1,10 @@
+{
+    "name_first" : "FirstnameFirstname",
+    "name_family" : "FamilynameFamilyname",
+    "birthDate" : "BirthdateBirthdate",
+    "address" : "AddressAddress",
+    "city" : "CityCity",
+    "case_number" : "CasenumberCasenumber",
+    "phone" : "PhonePhone",
+    "name_perm" : "NameName"
+}

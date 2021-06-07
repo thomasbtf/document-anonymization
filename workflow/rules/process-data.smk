@@ -18,6 +18,7 @@ rule identify_personal_data:
     output:
         text_to_redact=temp("results/{id}/tmp/data-to-redact/{img}.tsv"),
         all_text=temp("results/{id}/tmp/detected-text/{img}.tsv"),
+        non_personal_data="results/{id}/text/{img}.txt",
     log:
         "logs/{id}/identify-personal-data/{img}.log",
     conda:

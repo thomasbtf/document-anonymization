@@ -5,6 +5,7 @@ import typing
 
 def scan_folder(subfolder_path: str, writeable_file_object: typing.TextIO):
     ignore = [".snakemake_timestamp", ".DS_Store"]
+    
     for entry in os.scandir(subfolder_path):
         if entry.is_dir(follow_symlinks=False):
             scan_folder(entry.path, writeable_file_object)

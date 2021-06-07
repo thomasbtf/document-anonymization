@@ -20,7 +20,7 @@ rule identify_personal_data:
         all_text=temp("results/{id}/tmp/detected-text/{img}.tsv"),
         non_personal_data="results/{id}/text/{img}.txt",
     params:
-        replacements = "resources/replacements.json"
+        replacements="resources/replacements.json",
     log:
         "logs/{id}/identify-personal-data/{img}.log",
     conda:

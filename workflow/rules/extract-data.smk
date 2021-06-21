@@ -9,8 +9,6 @@ rule extract_personal_data:
     script:
         "../scripts/extract-personal-data.py"
 
-# if get_additional_metadata
-
 rule extract_lz4_docs:
     input:
         get_compressed_docs,

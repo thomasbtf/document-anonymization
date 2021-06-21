@@ -32,14 +32,13 @@ def get_fhir_metadata(wildcards):
     return pep.sample_table.loc[wildcards.id][["fhir_metadata"]]
 
 def get_additional_metadata(wildcards):
-    if len(pep.sample_table.loc[wildcards.id]) < 4:
-        return []
+    if type(pep.sample_table.loc[wildcards.id]["additional_metadata"]) == str:
+        return pep.sample_table.loc[wildcards.id][["additional_metadata"]]   
     else:
-        return pep.sample_table.loc[wildcards.id][["additional_metadata"]]
+        return []
 
 def get_all_ids():
     return pep.sample_table["sample_name"].to_list()
-
 
 def get_image_paths_for_id(wildcards):
     with checkpoints.fix_file_ext.get(id=wildcards.id).output[0].open() as f:

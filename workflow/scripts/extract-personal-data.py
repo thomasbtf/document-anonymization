@@ -142,7 +142,7 @@ def variate_personal_data(personal_data: dict, first_name_count: int) -> default
     return personal_data
 
 def add_additional_personal_data(add_json_path: str, personal_data: dict) -> defaultdict:
-
+    # if an additional data file exist, this data will be added to the personal data json file
     with open(add_json_path) as json_file:
         additional_data = json.load(json_file)
     personal_data.update(additional_data)
@@ -176,9 +176,6 @@ if __name__ == "__main__":
 
     # personal_data = {key: value.lower().strip() for key, value in personal_data.items()}
     var_data = {key: value.lower().strip() for key, value in var_data.items()}
-    
-    with open("/local/data/dev/josefa/document-anonymization/control.txt", "a") as txt:
-        txt.write(str(len(snakemake.input)))
 
     if len(snakemake.input) > 1:
         add_data = add_additional_personal_data(snakemake.input[1], var_data)

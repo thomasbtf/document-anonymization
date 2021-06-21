@@ -1,6 +1,7 @@
 rule extract_personal_data:
     input:
         get_fhir_metadata,
+        get_additional_metadata,
     output:
         temp("results/{id}/tmp/personal-data.json"),
     log:
@@ -8,6 +9,7 @@ rule extract_personal_data:
     script:
         "../scripts/extract-personal-data.py"
 
+# if get_additional_metadata
 
 rule extract_lz4_docs:
     input:

@@ -32,8 +32,11 @@ def get_fhir_metadata(wildcards):
     return pep.sample_table.loc[wildcards.id][["fhir_metadata"]]
 
 def get_additional_metadata(wildcards):
-    if type(pep.sample_table.loc[wildcards.id]["additional_metadata"]) == str:
-        return pep.sample_table.loc[wildcards.id][["additional_metadata"]]   
+    if "additional_metadata" in pep.sample_table.columns:
+        if type(pep.sample_table.loc[wildcards.id]["additional_metadata"]) == str:
+            return pep.sample_table.loc[wildcards.id][["additional_metadata"]]
+        else:
+            return []
     else:
         return []
 

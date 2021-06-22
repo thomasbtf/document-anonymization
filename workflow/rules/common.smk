@@ -31,10 +31,17 @@ def get_compressed_docs(wildcards):
 def get_fhir_metadata(wildcards):
     return pep.sample_table.loc[wildcards.id][["fhir_metadata"]]
 
+def get_additional_metadata(wildcards):
+    if "additional_metadata" in pep.sample_table.columns:
+        if type(pep.sample_table.loc[wildcards.id]["additional_metadata"]) == str:
+            return pep.sample_table.loc[wildcards.id][["additional_metadata"]]
+        else:
+            return []
+    else:
+        return []
 
 def get_all_ids():
     return pep.sample_table["sample_name"].to_list()
-
 
 def get_image_paths_for_id(wildcards):
     with checkpoints.fix_file_ext.get(id=wildcards.id).output[0].open() as f:

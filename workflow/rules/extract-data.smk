@@ -1,13 +1,13 @@
 rule extract_personal_data:
     input:
         get_fhir_metadata,
+        get_additional_metadata,
     output:
         temp("results/{id}/tmp/personal-data.json"),
     log:
         "logs/{id}/extract_personal_data.log",
     script:
         "../scripts/extract-personal-data.py"
-
 
 rule extract_lz4_docs:
     input:

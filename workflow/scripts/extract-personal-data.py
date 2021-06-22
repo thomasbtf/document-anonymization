@@ -20,7 +20,7 @@ def parse_meta_data(json_path: str) -> defaultdict:
     with open(json_path) as json_file:
         data = json.load(json_file)
 
-    # select the patient reosurce from the bundel data export
+    # select the patient resource from the bundel data export
     for ele in data.get("entry", {}):
         # iterate of entries
         for key, value in ele.get("resource", {}).items():
@@ -141,6 +141,13 @@ def variate_personal_data(personal_data: dict, first_name_count: int) -> default
 
     return personal_data
 
+def add_additional_personal_data(add_json_path: str, personal_data: dict) -> defaultdict:
+    # if an additional data file exist, this data will be added to the personal data json file
+    with open(add_json_path) as json_file:
+        additional_data = json.load(json_file)
+    personal_data.update(additional_data)
+    
+    return personal_data
 
 def save_personal_data(personal_data: dict, out_path: str):
     """Save the final dic with the personal data as json.
@@ -169,7 +176,12 @@ if __name__ == "__main__":
 
     # personal_data = {key: value.lower().strip() for key, value in personal_data.items()}
     var_data = {key: value.lower().strip() for key, value in var_data.items()}
-    save_personal_data(var_data, snakemake.output[0])
+
+    if len(snakemake.input) > 1:
+        add_data = add_additional_personal_data(snakemake.input[1], var_data)
+        save_personal_data(add_data, snakemake.output[0])
+    else:
+        save_personal_data(var_data, snakemake.output[0])
 
 # def enrich_personal_data(personal_data: dict) -> dict:
 #     personal_data["names_combined"] = ",".join(
